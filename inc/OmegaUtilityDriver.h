@@ -10,7 +10,7 @@
  * File Created: Tuesday, 2nd July 2024 12:59:59 pm
  * Author: Omegaki113r (omegaki113r@gmail.com)
  * -----
- * Last Modified: Friday, 5th July 2024 10:13:17 pm
+ * Last Modified: Friday, 5th July 2024 10:30:24 pm
  * Modified By: Omegaki113r (omegaki113r@gmail.com)
  * -----
  * Copyright 2024 - 2024 0m3g4ki113r, Xtronic
@@ -37,7 +37,8 @@ extern "C"
 
 #define UNUSED(func) (void)func
 
-#define MAC_ADDRESS_BUFFER_LENGTH 18
+#define MAC_ADDRESS_BUFFER_LENGTH 6
+#define MAC_ADDRESS_STRING_BUFFER_LENGTH 18
 #define MAC2STR(addr, str)                                                                                        \
     do                                                                                                            \
     {                                                                                                             \
