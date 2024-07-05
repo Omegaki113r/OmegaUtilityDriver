@@ -10,7 +10,7 @@
  * File Created: Tuesday, 2nd July 2024 12:59:59 pm
  * Author: Omegaki113r (omegaki113r@gmail.com)
  * -----
- * Last Modified: Tuesday, 2nd July 2024 1:06:08 pm
+ * Last Modified: Friday, 5th July 2024 10:03:05 pm
  * Modified By: Omegaki113r (omegaki113r@gmail.com)
  * -----
  * Copyright 2024 - 2024 0m3g4ki113r, Xtronic
@@ -28,10 +28,28 @@ extern "C"
 {
 #endif
 
+#include "OmegaBaseLoggingController.h"
+
 #define MAX(x, y) (((x) > (y)) ? (x) : (y))
 #define MIN(x, y) (((x) < (y)) ? (x) : (y))
 
 #define UNUSED(func) (void)func
+
+#define MAC2STR(addr, str)                                                                                  \
+    do                                                                                                      \
+    {                                                                                                       \
+        if (addr == NULL)                                                                                   \
+        {                                                                                                   \
+            OMEGA_LOGE("Bluetooth address was NULL");                                                       \
+            return;                                                                                         \
+        }                                                                                                   \
+        if (str == NULL)                                                                                    \
+        {                                                                                                   \
+            OMEGA_LOGE("Provided buffer was NULL");                                                         \
+            return;                                                                                         \
+        }                                                                                                   \
+        snprintf(str, 18, "%02x:%02x:%02x:%02x:%02x:%02x", bda[0], bda[1], bda[2], bda[3], bda[4], bda[5]); \
+    } while (0);
 
 #if ESP_PLATFORM
 #if CONFIG_SPIRAM
