@@ -10,7 +10,7 @@
  * File Created: Tuesday, 2nd July 2024 12:59:59 pm
  * Author: Omegaki113r (omegaki113r@gmail.com)
  * -----
- * Last Modified: Saturday, 6th July 2024 4:46:43 pm
+ * Last Modified: Saturday, 6th July 2024 4:49:53 pm
  * Modified By: Omegaki113r (omegaki113r@gmail.com)
  * -----
  * Copyright 2024 - 2024 0m3g4ki113r, Xtronic
@@ -34,6 +34,11 @@ extern "C"
 
 #include "OmegaBaseLoggingController.h"
 
+#ifndef MAC2STR
+#define MAC2STR(a) (a)[0], (a)[1], (a)[2], (a)[3], (a)[4], (a)[5]
+#define MACSTR "%02x:%02x:%02x:%02x:%02x:%02x"
+#endif
+
 #define MAX(x, y) (((x) > (y)) ? (x) : (y))
 #define MIN(x, y) (((x) < (y)) ? (x) : (y))
 
@@ -41,35 +46,35 @@ extern "C"
 
 #define MAC_ADDRESS_BUFFER_LENGTH 6
 #define MAC_ADDRESS_STRING_BUFFER_LENGTH 17
-#define OMEGA_MAC2STR(addr, str)                                                                                  \
-    do                                                                                                            \
-    {                                                                                                             \
-        if (addr == NULL)                                                                                         \
-        {                                                                                                         \
-            OMEGA_LOGE("Bluetooth address was NULL");                                                             \
-            return;                                                                                               \
-        }                                                                                                         \
-        if (str == NULL)                                                                                          \
-        {                                                                                                         \
-            OMEGA_LOGE("Provided buffer was NULL");                                                               \
-            return;                                                                                               \
-        }                                                                                                         \
-        snprintf(str, 18, "%02x:%02x:%02x:%02x:%02x:%02x", addr[0], addr[1], addr[2], addr[3], addr[4], addr[5]); \
+#define OMEGA_MAC2STR(addr, str)                      \
+    do                                                \
+    {                                                 \
+        if (addr == NULL)                             \
+        {                                             \
+            OMEGA_LOGE("Bluetooth address was NULL"); \
+            return;                                   \
+        }                                             \
+        if (str == NULL)                              \
+        {                                             \
+            OMEGA_LOGE("Provided buffer was NULL");   \
+            return;                                   \
+        }                                             \
+        snprintf(str, 18, MACSTR, MAC2STR(addr));     \
     } while (0)
-#define OMEGA_STR2MAC(str, addr)                                                                            \
-    do                                                                                                      \
-    {                                                                                                       \
-        if (str == NULL)                                                                                    \
-        {                                                                                                   \
-            OMEGA_LOGE("String buffer was NULL");                                                           \
-            return;                                                                                         \
-        }                                                                                                   \
-        if (addr == NULL)                                                                                   \
-        {                                                                                                   \
-            OMEGA_LOGE("Destination buffer was NULL");                                                      \
-            return;                                                                                         \
-        }                                                                                                   \
-        sscanf(str, "%hhx:%hhx:%hhx:%hhx:%hhx:%hhx", addr[0], addr[1], addr[2], addr[3], addr[4], addr[5]); \
+#define OMEGA_STR2MAC(str, addr)                       \
+    do                                                 \
+    {                                                  \
+        if (str == NULL)                               \
+        {                                              \
+            OMEGA_LOGE("String buffer was NULL");      \
+            return;                                    \
+        }                                              \
+        if (addr == NULL)                              \
+        {                                              \
+            OMEGA_LOGE("Destination buffer was NULL"); \
+            return;                                    \
+        }                                              \
+        sscanf(str, MACSTR, MAC2STR(addr));            \
     } while (0)
 
 #if ESP_PLATFORM
