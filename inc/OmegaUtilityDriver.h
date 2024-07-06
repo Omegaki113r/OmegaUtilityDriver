@@ -10,7 +10,7 @@
  * File Created: Tuesday, 2nd July 2024 12:59:59 pm
  * Author: Omegaki113r (omegaki113r@gmail.com)
  * -----
- * Last Modified: Saturday, 6th July 2024 4:10:25 pm
+ * Last Modified: Saturday, 6th July 2024 4:46:43 pm
  * Modified By: Omegaki113r (omegaki113r@gmail.com)
  * -----
  * Copyright 2024 - 2024 0m3g4ki113r, Xtronic
@@ -18,6 +18,8 @@
  * HISTORY:
  * Date      	By	Comments
  * ----------	---	---------------------------------------------------------
+ *
+ * 06-07-2024	0m3g4	adding OMEGA_STR2MAC implemented
  *
  * 05-07-2024	0m3g4	adding MAC_ADDRESS_BUFFER_LENGTH and MAC2STR
  */
@@ -53,7 +55,22 @@ extern "C"
             return;                                                                                               \
         }                                                                                                         \
         snprintf(str, 18, "%02x:%02x:%02x:%02x:%02x:%02x", addr[0], addr[1], addr[2], addr[3], addr[4], addr[5]); \
-    } while (0);
+    } while (0)
+#define OMEGA_STR2MAC(str, addr)                                                                            \
+    do                                                                                                      \
+    {                                                                                                       \
+        if (str == NULL)                                                                                    \
+        {                                                                                                   \
+            OMEGA_LOGE("String buffer was NULL");                                                           \
+            return;                                                                                         \
+        }                                                                                                   \
+        if (addr == NULL)                                                                                   \
+        {                                                                                                   \
+            OMEGA_LOGE("Destination buffer was NULL");                                                      \
+            return;                                                                                         \
+        }                                                                                                   \
+        sscanf(str, "%hhx:%hhx:%hhx:%hhx:%hhx:%hhx", addr[0], addr[1], addr[2], addr[3], addr[4], addr[5]); \
+    } while (0)
 
 #if ESP_PLATFORM
 #if CONFIG_SPIRAM
