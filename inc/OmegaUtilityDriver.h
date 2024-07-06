@@ -10,7 +10,7 @@
  * File Created: Tuesday, 2nd July 2024 12:59:59 pm
  * Author: Omegaki113r (omegaki113r@gmail.com)
  * -----
- * Last Modified: Saturday, 6th July 2024 5:07:14 pm
+ * Last Modified: Saturday, 6th July 2024 5:11:04 pm
  * Modified By: Omegaki113r (omegaki113r@gmail.com)
  * -----
  * Copyright 2024 - 2024 0m3g4ki113r, Xtronic
@@ -43,7 +43,7 @@ extern "C"
 #define MAC_ADDRESS_STRING_BUFFER_LENGTH 17
 #define MAC2STR_STRING "%02x:%02x:%02x:%02x:%02x:%02x"
 #define STR2MAC_STRING "%hhx:%hhx:%hhx:%hhx:%hhx:%hhx"
-#define BUFFER_EXPAND(a) (a)[0], (a)[1], (a)[2], (a)[3], (a)[4], (a)[5]
+#define MAC2STR_BUFFER_EXPAND(a) (a)[0], (a)[1], (a)[2], (a)[3], (a)[4], (a)[5]
 #define OMEGA_MAC2STR(addr, str)                                \
     do                                                          \
     {                                                           \
@@ -59,20 +59,20 @@ extern "C"
         }                                                       \
         snprintf(str, 18, MAC2STR_STRING, BUFFER_EXPAND(addr)); \
     } while (0)
-#define OMEGA_STR2MAC(str, addr)                          \
-    do                                                    \
-    {                                                     \
-        if (str == NULL)                                  \
-        {                                                 \
-            OMEGA_LOGE("String buffer was NULL");         \
-            return;                                       \
-        }                                                 \
-        if (addr == NULL)                                 \
-        {                                                 \
-            OMEGA_LOGE("Destination buffer was NULL");    \
-            return;                                       \
-        }                                                 \
-        sscanf(str, STR2MAC_STRING, BUFFER_EXPAND(addr)); \
+#define OMEGA_STR2MAC(str, addr)                                                                 \
+    do                                                                                           \
+    {                                                                                            \
+        if (str == NULL)                                                                         \
+        {                                                                                        \
+            OMEGA_LOGE("String buffer was NULL");                                                \
+            return;                                                                              \
+        }                                                                                        \
+        if (addr == NULL)                                                                        \
+        {                                                                                        \
+            OMEGA_LOGE("Destination buffer was NULL");                                           \
+            return;                                                                              \
+        }                                                                                        \
+        sscanf(str, STR2MAC_STRING, &addr[0], &addr[1], &addr[2], &addr[3], &addr[4], &addr[5]); \
     } while (0)
 
 #if ESP_PLATFORM
