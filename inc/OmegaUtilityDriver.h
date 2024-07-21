@@ -10,7 +10,7 @@
  * File Created: Tuesday, 2nd July 2024 12:59:59 pm
  * Author: Omegaki113r (omegaki113r@gmail.com)
  * -----
- * Last Modified: Saturday, 6th July 2024 5:13:23 pm
+ * Last Modified: Monday, 22nd July 2024 3:10:36 am
  * Modified By: Omegaki113r (omegaki113r@gmail.com)
  * -----
  * Copyright 2024 - 2024 0m3g4ki113r, Xtronic
@@ -86,6 +86,9 @@ extern "C"
 #define omega_free(ptr) free(ptr)
 #endif
 #endif
+
+    typedef uint8_t u8;
+    typedef uint64_t u64;
 
 #ifdef __cplusplus
 }
