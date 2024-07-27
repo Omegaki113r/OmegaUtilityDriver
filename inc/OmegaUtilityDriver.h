@@ -10,7 +10,7 @@
  * File Created: Tuesday, 2nd July 2024 12:59:59 pm
  * Author: Omegaki113r (omegaki113r@gmail.com)
  * -----
- * Last Modified: Monday, 22nd July 2024 3:10:36 am
+ * Last Modified: Saturday, 27th July 2024 7:06:14 am
  * Modified By: Omegaki113r (omegaki113r@gmail.com)
  * -----
  * Copyright 2024 - 2024 0m3g4ki113r, Xtronic
@@ -30,6 +30,10 @@
 #ifdef __cplusplus
 extern "C"
 {
+#endif
+
+#if ESP_PLATFORM
+#include <esp_heap_caps.h>
 #endif
 
 #include "OmegaBaseLoggingController.h"
