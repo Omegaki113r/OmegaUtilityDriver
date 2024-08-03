@@ -10,7 +10,7 @@
  * File Created: Tuesday, 2nd July 2024 12:59:59 pm
  * Author: Omegaki113r (omegaki113r@gmail.com)
  * -----
- * Last Modified: Saturday, 27th July 2024 7:06:14 am
+ * Last Modified: Sunday, 4th August 2024 5:08:30 am
  * Modified By: Omegaki113r (omegaki113r@gmail.com)
  * -----
  * Copyright 2024 - 2024 0m3g4ki113r, Xtronic
@@ -83,11 +83,21 @@ extern "C"
 #if CONFIG_SPIRAM
 #define omega_malloc(size) heap_caps_malloc(size, MALLOC_CAP_SPIRAM)
 #define omega_realloc(prev_ptr, new_size) heap_caps_realloc(prev_ptr, new_size, MALLOC_CAP_SPIRAM)
-#define omega_free(ptr) heap_caps_free(ptr)
+#define omega_free(ptr)      \
+    do                       \
+    {                        \
+        heap_caps_free(ptr); \
+        ptr = NULL;          \
+    } while (0)
 #else
 #define omega_malloc(size) malloc(size)
 #define omega_realloc(prev_ptr, new_size) realloc(prev_ptr, new_size)
-#define omega_free(ptr) free(ptr)
+#define omega_free(ptr) \
+    do                  \
+    {                   \
+        free(ptr);      \
+        ptr = NULL;     \
+    } while (0)
 #endif
 #endif
 
