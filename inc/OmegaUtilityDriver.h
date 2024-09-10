@@ -10,7 +10,7 @@
  * File Created: Tuesday, 2nd July 2024 12:59:59 pm
  * Author: Omegaki113r (omegaki113r@gmail.com)
  * -----
- * Last Modified: Tuesday, 10th September 2024 11:07:55 pm
+ * Last Modified: Wednesday, 11th September 2024 12:27:48 am
  * Modified By: Omegaki113r (omegaki113r@gmail.com)
  * -----
  * Copyright 2024 - 2024 0m3g4ki113r, Xtronic
@@ -42,6 +42,9 @@ extern "C"
 #define MIN(x, y) (((x) < (y)) ? (x) : (y))
 
 #define UNUSED(func) (void)func
+
+#define GPIO_LEVEL_LOW 0
+#define GPIO_LEVEL_HIGH 1
 
 #define MAC_ADDRESS_BUFFER_LENGTH 6
 #define MAC_ADDRESS_STRING_BUFFER_LENGTH 17
@@ -102,7 +105,11 @@ extern "C"
 #endif
 
     typedef uint8_t u8;
+    typedef int8_t i8;
+    typedef uint16_t u16;
+    typedef int16_t i16;
     typedef uint64_t u64;
+    typedef int64_t i64;
 
 #define REGISTER_WRITE_DATA(name, ...) u8 name[] = {__VA_ARGS__}
 #define REGISTER_READ_DATA(name, size) u8 name[size] = {0}
