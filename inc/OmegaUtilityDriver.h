@@ -36,7 +36,11 @@ extern "C"
 #include <esp_heap_caps.h>
 #endif
 
+#if __has_include("OmegaBaseLoggingController.h")
 #include "OmegaBaseLoggingController.h"
+#else
+#define OMEGA_LOGE
+#endif
 
 #define MAX(x, y) (((x) > (y)) ? (x) : (y))
 #define MIN(x, y) (((x) < (y)) ? (x) : (y))
