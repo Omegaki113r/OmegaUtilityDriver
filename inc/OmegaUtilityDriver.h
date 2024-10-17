@@ -118,6 +118,12 @@ extern "C"
 #define REGISTER_WRITE_DATA(name, ...) u8 name[] = {__VA_ARGS__}
 #define REGISTER_READ_DATA(name, size) u8 name[size] = {0}
 
+typedef enum
+{
+    eSUCCESS = 0,
+    eFAILED = 1,
+}oStatus;
+
 #ifdef __cplusplus
 }
 #endif
