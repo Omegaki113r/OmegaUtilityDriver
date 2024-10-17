@@ -122,7 +122,7 @@ typedef enum
 {
     eSUCCESS = 0,
     eFAILED = 1,
-}oStatus;
+}OmegaStatus;
 
 #ifdef __cplusplus
 }
