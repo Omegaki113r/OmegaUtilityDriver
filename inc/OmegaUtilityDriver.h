@@ -45,6 +45,7 @@ extern "C"
 #define MAX(x, y) (((x) > (y)) ? (x) : (y))
 #define MIN(x, y) (((x) < (y)) ? (x) : (y))
 
+#define internal static
 #define UNUSED(func) (void)func
 
 #define GPIO_LEVEL_LOW 0
