@@ -121,8 +121,10 @@ extern "C"
 
 typedef enum
 {
-    eSUCCESS = 0,
-    eFAILED = 1,
+    eSUCCESS,
+    eFAILED,
+    eALREADY_INITED,
+    eALREADY_STARTED,
 }OmegaStatus;
 
 #ifdef __cplusplus
