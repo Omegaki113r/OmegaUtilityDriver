@@ -127,6 +127,12 @@ typedef enum
     eALREADY_STARTED,
 }OmegaStatus;
 
+typedef struct
+{
+    void* port;
+    uint32_t pin;
+}OmegaGPIO_t;
+
 #ifdef __cplusplus
 }
 #endif
