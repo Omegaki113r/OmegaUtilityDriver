@@ -127,10 +127,11 @@ typedef enum
     eALREADY_STARTED,
 }OmegaStatus;
 
+#define OMEGA_GPIO_NC ((OmegaGPIO_t){.port = NULL,.pin = -1})
 typedef struct
 {
     void* port;
-    uint32_t pin;
+    int32_t pin;
 }OmegaGPIO_t;
 
 #ifdef __cplusplus
