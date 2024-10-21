@@ -123,7 +123,10 @@ typedef enum
 {
     eSUCCESS,
     eFAILED,
+    eTIMEOUT,
+    eNOT_INITED,
     eALREADY_INITED,
+    eNOT_STARTED,
     eALREADY_STARTED,
 }OmegaStatus;
 
