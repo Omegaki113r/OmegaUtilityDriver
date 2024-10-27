@@ -48,6 +48,11 @@ extern "C"
 #define internal static
 #define UNUSED(arg) (void)arg
 
+#if ESP_PLATFORM
+#define PERIPHERAL_CORE 0
+#define APP_CORE 1
+#endif
+
 #define GPIO_LEVEL_LOW 0
 #define GPIO_LEVEL_HIGH 1
 
