@@ -135,6 +135,12 @@ extern "C"
 #define APP_CORE 1
 #endif
 
+#if __has_include(<freertos/task.h>)
+#include <freertos/task.h>
+#define delay_ms(x) vTaskDelay(pdMS_TO_TICKS(x))
+#define delay_s(x) vTaskDelay(pdMS_TO_TICKS(x * 1000))
+#endif
+
 #define GPIO_LEVEL_LOW 0
 #define GPIO_LEVEL_HIGH 1
 
