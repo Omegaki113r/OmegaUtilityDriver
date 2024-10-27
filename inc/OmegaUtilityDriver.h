@@ -42,6 +42,94 @@ extern "C"
 #define OMEGA_LOGE
 #endif
 
+#define STRINGIFY(s) #s
+
+#define START_ESCAPE_LOGGING_PARAMETER "\033["
+#define END_ESCAPE_LOGGIN_PARAMETER "\033[0m"
+#define DETAILED_BACKGROUND_FOREGROUND_COLOR "48;5;250;38;5;232;1"
+#define INFO_BACKGROUND_FOREGROUND_COLOR "48;5;2;38;5;0"
+#define INFO_TEXT_COLOR "38;5;2"
+#define ERROR_BACKGROUND_FOREGROUND_COLOR "48;5;1;38;5;0"
+#define ERROR_TEXT_COLOR "38;5;1"
+#define WARN_BACKGROUND_FOREGROUND_COLOR "48;5;202;38;5;0"
+#define WARN_TEXT_COLOR "38;5;202"
+#define DEBUG_BACKGROUND_FOREGROUND_COLOR "48;5;3;38;5;0"
+#define DEBUG_TEXT_COLOR "38;5;3"
+#define VERBOSE_BACKGROUND_FOREGROUND_COLOR "48;5;15;38;5;0"
+#define VERBOSE_TEXT_COLOR "38;5;15"
+#define PROFILE_BACKGROUND_FOREGROUND_COLOR "48;5;207;38;5;0"
+#define PROFILE_TEXT_COLOR "38;5;207"
+#define END_PARAMETER "m"
+
+#if CONFIG_OMEGA_LOGGING
+    static inline void OmegLoggingSystemController_log_hex(const char *initial_text, const char *file_name, const char *function_name, const size_t line_number, const char *text_color, void *buffer, size_t length)
+    {
+        char ascii[17];
+        size_t i, j;
+        ascii[16] = '\0';
+        for (i = 0; i < length; ++i)
+        {
+            if (i % 16 == 0)
+            {
+                printf(initial_text, file_name, function_name, line_number);
+                printf(START_ESCAPE_LOGGING_PARAMETER "%s" END_PARAMETER, text_color);
+            }
+            printf("%02X ", ((unsigned char *)buffer)[i]);
+            if (((unsigned char *)buffer)[i] >= ' ' && ((unsigned char *)buffer)[i] <= '~')
+            {
+                ascii[i % 16] = ((unsigned char *)buffer)[i];
+            }
+            else
+            {
+                ascii[i % 16] = '.';
+            }
+            if ((i + 1) % 8 == 0 || i + 1 == length)
+            {
+                printf(" ");
+                if ((i + 1) % 16 == 0)
+                {
+                    printf("|%s|\n", ascii);
+                }
+                else if (i + 1 == length)
+                {
+                    ascii[(i + 1) % 16] = '\0';
+                    if ((i + 1) % 16 <= 8)
+                    {
+                        printf(" ");
+                    }
+                    for (j = (i + 1) % 16; j < 16; ++j)
+                    {
+                        printf("   ");
+                    }
+                    printf("|%s|\n", ascii);
+                }
+            }
+        }
+        printf(END_ESCAPE_LOGGIN_PARAMETER);
+    }
+#define OMEGA_LOGV(format, ...) printf(START_ESCAPE_LOGGING_PARAMETER DETAILED_BACKGROUND_FOREGROUND_COLOR END_PARAMETER " %s >> %s:%d " END_ESCAPE_LOGGIN_PARAMETER "" START_ESCAPE_LOGGING_PARAMETER VERBOSE_BACKGROUND_FOREGROUND_COLOR END_PARAMETER " [V] " END_ESCAPE_LOGGIN_PARAMETER " " START_ESCAPE_LOGGING_PARAMETER VERBOSE_TEXT_COLOR END_PARAMETER format END_ESCAPE_LOGGIN_PARAMETER "\r\n", __func__, __FILE_NAME__, __LINE__, ##__VA_ARGS__)
+#define OMEGA_LOGD(format, ...) printf(START_ESCAPE_LOGGING_PARAMETER DETAILED_BACKGROUND_FOREGROUND_COLOR END_PARAMETER " %s >> %s:%d " END_ESCAPE_LOGGIN_PARAMETER "" START_ESCAPE_LOGGING_PARAMETER DEBUG_BACKGROUND_FOREGROUND_COLOR END_PARAMETER " [D] " END_ESCAPE_LOGGIN_PARAMETER " " START_ESCAPE_LOGGING_PARAMETER DEBUG_TEXT_COLOR END_PARAMETER format END_ESCAPE_LOGGIN_PARAMETER "\r\n", __func__, __FILE_NAME__, __LINE__, ##__VA_ARGS__)
+#define OMEGA_LOGI(format, ...) printf(START_ESCAPE_LOGGING_PARAMETER DETAILED_BACKGROUND_FOREGROUND_COLOR END_PARAMETER " %s >> %s:%d " END_ESCAPE_LOGGIN_PARAMETER "" START_ESCAPE_LOGGING_PARAMETER INFO_BACKGROUND_FOREGROUND_COLOR END_PARAMETER " [I] " END_ESCAPE_LOGGIN_PARAMETER " " START_ESCAPE_LOGGING_PARAMETER INFO_TEXT_COLOR END_PARAMETER format END_ESCAPE_LOGGIN_PARAMETER "\r\n", __func__, __FILE_NAME__, __LINE__, ##__VA_ARGS__)
+#define OMEGA_LOGW(format, ...) printf(START_ESCAPE_LOGGING_PARAMETER DETAILED_BACKGROUND_FOREGROUND_COLOR END_PARAMETER " %s >> %s:%d " END_ESCAPE_LOGGIN_PARAMETER "" START_ESCAPE_LOGGING_PARAMETER WARN_BACKGROUND_FOREGROUND_COLOR END_PARAMETER " [W] " END_ESCAPE_LOGGIN_PARAMETER " " START_ESCAPE_LOGGING_PARAMETER WARN_TEXT_COLOR END_PARAMETER format END_ESCAPE_LOGGIN_PARAMETER "\r\n", __func__, __FILE_NAME__, __LINE__, ##__VA_ARGS__)
+#define OMEGA_LOGE(format, ...) printf(START_ESCAPE_LOGGING_PARAMETER DETAILED_BACKGROUND_FOREGROUND_COLOR END_PARAMETER " %s >> %s:%d " END_ESCAPE_LOGGIN_PARAMETER "" START_ESCAPE_LOGGING_PARAMETER ERROR_BACKGROUND_FOREGROUND_COLOR END_PARAMETER " [E] " END_ESCAPE_LOGGIN_PARAMETER " " START_ESCAPE_LOGGING_PARAMETER ERROR_TEXT_COLOR END_PARAMETER format END_ESCAPE_LOGGIN_PARAMETER "\r\n", __func__, __FILE_NAME__, __LINE__, ##__VA_ARGS__)
+#define OMEGA_HEX_LOGV(buffer, length) OmegLoggingSystemController_log_hex(START_ESCAPE_LOGGING_PARAMETER DETAILED_BACKGROUND_FOREGROUND_COLOR END_PARAMETER " %s >> %s:%d " END_ESCAPE_LOGGIN_PARAMETER "" START_ESCAPE_LOGGING_PARAMETER VERBOSE_BACKGROUND_FOREGROUND_COLOR END_PARAMETER " [V] " END_ESCAPE_LOGGIN_PARAMETER " ", __func__, __FILE_NAME__, __LINE__, VERBOSE_TEXT_COLOR, buffer, length)
+#define OMEGA_HEX_LOGD(buffer, length) OmegLoggingSystemController_log_hex(START_ESCAPE_LOGGING_PARAMETER DETAILED_BACKGROUND_FOREGROUND_COLOR END_PARAMETER " %s >> %s:%d " END_ESCAPE_LOGGIN_PARAMETER "" START_ESCAPE_LOGGING_PARAMETER DEBUG_BACKGROUND_FOREGROUND_COLOR END_PARAMETER " [D] " END_ESCAPE_LOGGIN_PARAMETER " ", __func__, __FILE_NAME__, __LINE__, DEBUG_TEXT_COLOR, buffer, length)
+#define OMEGA_HEX_LOGI(buffer, length) OmegLoggingSystemController_log_hex(START_ESCAPE_LOGGING_PARAMETER DETAILED_BACKGROUND_FOREGROUND_COLOR END_PARAMETER " %s >> %s:%d " END_ESCAPE_LOGGIN_PARAMETER "" START_ESCAPE_LOGGING_PARAMETER INFO_BACKGROUND_FOREGROUND_COLOR END_PARAMETER " [I] " END_ESCAPE_LOGGIN_PARAMETER " ", __func__, __FILE_NAME__, __LINE__, INFO_TEXT_COLOR, buffer, length)
+#define OMEGA_HEX_LOGW(buffer, length) OmegLoggingSystemController_log_hex(START_ESCAPE_LOGGING_PARAMETER DETAILED_BACKGROUND_FOREGROUND_COLOR END_PARAMETER " %s >> %s:%d " END_ESCAPE_LOGGIN_PARAMETER "" START_ESCAPE_LOGGING_PARAMETER WARN_BACKGROUND_FOREGROUND_COLOR END_PARAMETER " [W] " END_ESCAPE_LOGGIN_PARAMETER " ", __func__, __FILE_NAME__, __LINE__, WARN_TEXT_COLOR, buffer, length)
+#define OMEGA_HEX_LOGE(buffer, length) OmegLoggingSystemController_log_hex(START_ESCAPE_LOGGING_PARAMETER DETAILED_BACKGROUND_FOREGROUND_COLOR END_PARAMETER " %s >> %s:%d " END_ESCAPE_LOGGIN_PARAMETER "" START_ESCAPE_LOGGING_PARAMETER ERROR_BACKGROUND_FOREGROUND_COLOR END_PARAMETER " [E] " END_ESCAPE_LOGGIN_PARAMETER " ", __func__, __FILE_NAME__, __LINE__, ERROR_TEXT_COLOR, buffer, length)
+#else
+#define OMEGA_LOGV(format, ...)
+#define OMEGA_LOGD(format, ...)
+#define OMEGA_LOGI(format, ...)
+#define OMEGA_LOGW(format, ...)
+#define OMEGA_LOGE(format, ...)
+#define OMEGA_HEX_LOGV(buffer, length)
+#define OMEGA_HEX_LOGD(buffer, length)
+#define OMEGA_HEX_LOGI(buffer, length)
+#define OMEGA_HEX_LOGW(buffer, length)
+#define OMEGA_HEX_LOGE(buffer, length)
+#endif
+
 #define MAX(x, y) (((x) > (y)) ? (x) : (y))
 #define MIN(x, y) (((x) < (y)) ? (x) : (y))
 
