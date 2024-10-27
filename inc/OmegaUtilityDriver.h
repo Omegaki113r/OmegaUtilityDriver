@@ -36,12 +36,6 @@ extern "C"
 #include <esp_heap_caps.h>
 #endif
 
-#if __has_include("OmegaBaseLoggingController.h")
-#include "OmegaBaseLoggingController.h"
-#else
-#define OMEGA_LOGE
-#endif
-
 #define STRINGIFY(s) #s
 
 #define START_ESCAPE_LOGGING_PARAMETER "\033["
