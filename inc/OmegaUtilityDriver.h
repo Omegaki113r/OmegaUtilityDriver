@@ -36,6 +36,10 @@ extern "C"
 #include <esp_heap_caps.h>
 #endif
 
+#ifndef __FILE_NAME__
+#define __FILE_NAME__ __FILE__
+#endif
+
 #define STRINGIFY(s) #s
 
 #define START_ESCAPE_LOGGING_PARAMETER "\033["
