@@ -139,7 +139,8 @@ extern "C"
 #define APP_CORE 1
 #endif
 
-#if __has_include(<freertos/task.h>)
+#if __has_include(<freertos/FreeRTOS.h>)
+#include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 #define delay_ms(x) vTaskDelay(pdMS_TO_TICKS(x))
 #define delay_s(x) vTaskDelay(pdMS_TO_TICKS(x * 1000))
