@@ -15,5 +15,5 @@ if(ESP_PLATFORM)
       GIT_TAG "origin/master"   # it's much better to use a specific Git revision or Git tag for reproducibility
       SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/submodules/third-party/STC"
     )
-    #FetchContent_MakeAvailable(foobar)
+    FetchContent_MakeAvailable(foobar)
 endif(ESP_PLATFORM)
