@@ -10,7 +10,7 @@ if(ESP_PLATFORM)
 
     include(FetchContent)
     FetchContent_Declare(foobar
-      GIT_REPOSITORY "https://github.com/opencv/opencv.git"
+      GIT_REPOSITORY "https://github.com/stclib/STC.git"
       GIT_TAG "origin/master"   # it's much better to use a specific Git revision or Git tag for reproducibility
       SOURCE_DIR "${CMAKE_CURRENT_LIST_DIR}/../opencv"
     )
