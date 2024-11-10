@@ -9,6 +9,7 @@ if(ESP_PLATFORM)
     target_compile_options(${COMPONENT_LIB} PRIVATE -Wall -Werror)
 
     include(FetchContent)
+    add_compile_definitions(BUILD_TESTING=0)
     FetchContent_Declare(foobar
       GIT_REPOSITORY "https://github.com/stclib/STC.git"
       GIT_TAG "origin/master"   # it's much better to use a specific Git revision or Git tag for reproducibility
