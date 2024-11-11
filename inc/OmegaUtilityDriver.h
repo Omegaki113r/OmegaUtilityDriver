@@ -214,8 +214,20 @@ extern "C"
     typedef uint64_t u64;
     typedef int64_t i64;
 
-#define REGISTER_WRITE_DATA(name, ...) u8 name[] = {__VA_ARGS__}
-#define REGISTER_READ_DATA(name, size) u8 name[size] = {0}
+#define CREATE_BUFFER_U8(name, ...) u8 name[] = {__VA_ARGS__};
+#define CREATE_BUFFER_U16(name, ...) u16 name[] = {__VA_ARGS__};
+#define CREATE_BUFFER_FLOAT(name, ...) float name[] = {__VA_ARGS__};
+
+#define STATIC_CREATE_BUFFER_U8(name, ...) static u8 name[] = {__VA_ARGS__};
+#define STATIC_CREATE_BUFFER_U16(name, ...) static u16 name[] = {__VA_ARGS__};
+#define STATIC_CREATE_BUFFER_FLOAT(name, ...) static float name[] = {__VA_ARGS__};
+
+#define CREATE_EMPTY_BUFFER_U8(name, size) u8 name[size] = {0};
+#define CREATE_EMPTY_BUFFER_U16(name, size) u16 name[size] = {0};
+#define CREATE_EMPTY_BUFFER_FLOAT(name, size) float name[size] = {0};
+#define STATIC_EMPTY_CREATE_BUFFER_U8(name, size) static u8 name[size] = {0};
+#define STATIC_EMPTY_CREATE_BUFFER_U16(name, size) static u16 name[size] = {0};
+#define STATIC_EMPTY_CREATE_BUFFER_FLOAT(name, size) static float name[size] = {0};
 
 typedef enum
 {
