@@ -132,7 +132,9 @@ extern "C"
 #define MIN(x, y) (((x) < (y)) ? (x) : (y))
 
 #define internal static
+#ifndef UNUSED
 #define UNUSED(arg) (void)arg
+#endif
 
 #if ESP_PLATFORM
 #define PERIPHERAL_CORE 0
