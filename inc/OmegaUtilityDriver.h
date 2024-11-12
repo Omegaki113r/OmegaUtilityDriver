@@ -229,6 +229,10 @@ extern "C"
 #define STATIC_EMPTY_CREATE_BUFFER_U16(name, size) static u16 name[size] = {0};
 #define STATIC_EMPTY_CREATE_BUFFER_FLOAT(name, size) static float name[size] = {0};
 
+#define BIT(x) 1<<x
+#define LSHIFT(x,count) x>>count
+#define RSHIFT(x,count) x<<count
+
 typedef enum
 {
     eSUCCESS,
