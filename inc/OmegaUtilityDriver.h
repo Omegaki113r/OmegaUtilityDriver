@@ -231,14 +231,12 @@ extern "C"
 #define STATIC_EMPTY_CREATE_BUFFER_U16(name, size) static u16 name[size] = {0};
 #define STATIC_EMPTY_CREATE_BUFFER_FLOAT(name, size) static float name[size] = {0};
 
-#ifndef BIT
-#define BIT(x) (1<<x)
-#endif
-#define LSHIFT(x,count) (x>>count)
-#define RSHIFT(x,count) (x<<count)
-#define BIT_SET(x, bit) (x|BIT(bit))
-#define BIT_CLEAR(x,bit) (x & ~(BIT(bit)))
-#define BIT_CHECK(x,bit) (LSHIFT(x,bit) & 1)
+#define OMEGA_BIT(x) (1<<x)
+#define OMEGA_LSHIFT(x,count) (x>>count)
+#define OMEGA_RSHIFT(x,count) (x<<count)
+#define OMEGA_BIT_SET(x, bit) (x|OMEGA_BIT(bit))
+#define OMEGA_BIT_CLEAR(x,bit) (x & ~(OMEGA_BIT(bit)))
+#define OMEGA_BIT_CHECK(x,bit) (x & (1<<bit))
 
 typedef enum
 {
