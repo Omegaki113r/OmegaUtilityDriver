@@ -40,6 +40,9 @@ extern "C"
 #define __FILE_NAME__ __FILE__
 #endif
 
+#define US_TO_MS(x) (x/1000)
+#define US_TO_S(x) (x/(1000*1000))
+
 #define STRINGIFY(s) #s
 
 #define START_ESCAPE_LOGGING_PARAMETER "\033["
