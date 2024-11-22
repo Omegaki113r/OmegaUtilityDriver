@@ -32,6 +32,8 @@ extern "C"
 {
 #endif
 
+#include <stdint.h>
+
 #if ESP_PLATFORM
 #include <esp_heap_caps.h>
 #endif
