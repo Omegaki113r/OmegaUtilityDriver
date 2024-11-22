@@ -1,12 +1,12 @@
 /**
- * @file OmegaUtilityDriver.h
+ * @file OmegaUtilityDriver.hpp
  * @author Omegaki113r
  * @date Tuesday, 2nd July 2024 12:59:59 pm
  * @copyright Copyright 2024 - 2024 0m3g4ki113r, Xtronic
  * */
 /*
  * Project: OmegaUtilityDriver
- * File Name: OmegaUtilityDriver.h
+ * File Name: OmegaUtilityDriver.hpp
  * File Created: Tuesday, 2nd July 2024 12:59:59 pm
  * Author: Omegaki113r (omegaki113r@gmail.com)
  * -----
@@ -24,13 +24,7 @@
  * 05-07-2024	0m3g4	adding MAC_ADDRESS_BUFFER_LENGTH and MAC2STR
  */
 
-#ifndef __OMEGA_UTILITY_DRIVER_H__
-#define __OMEGA_UTILITY_DRIVER_H__
-
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+#pragma once
 
 #include <stdint.h>
 
@@ -262,9 +256,3 @@ typedef struct
     void* port;
     int32_t pin;
 }OmegaGPIO_t;
-
-#ifdef __cplusplus
-}
-#endif
-
-#endif
