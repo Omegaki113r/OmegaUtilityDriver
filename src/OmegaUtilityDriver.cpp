@@ -1,12 +1,12 @@
 /**
- * @file OmegaUtilityDriver.c
+ * @file OmegaUtilityDriver.cpp
  * @author Omegaki113r
  * @date Tuesday, 2nd July 2024 1:01:18 pm
  * @copyright Copyright 2024 - 2024 0m3g4ki113r, Xtronic
  * */
 /*
  * Project: OmegaUtilityDriver
- * File Name: OmegaUtilityDriver.c
+ * File Name: OmegaUtilityDriver.cpp
  * File Created: Tuesday, 2nd July 2024 1:01:18 pm
  * Author: Omegaki113r (omegaki113r@gmail.com)
  * -----
@@ -20,4 +20,4 @@
  * ----------	---	---------------------------------------------------------
  */
 
-#include "OmegaUtilityDriver.h"
+#include "OmegaUtilityDriver.hpp"
