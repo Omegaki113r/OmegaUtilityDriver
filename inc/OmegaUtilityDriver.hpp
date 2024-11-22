@@ -256,3 +256,5 @@ typedef struct
     void* port;
     int32_t pin;
 }OmegaGPIO_t;
+
+inline u64 OmegaUtilityDriver_generate_handle();
