@@ -257,4 +257,12 @@ typedef struct
     int32_t pin;
 }OmegaGPIO_t;
 
+#if ESP_PLATFORM
+#include <esp_random.h>
+#define RAND() (esp_random() & 0x7fff)
+#else
+#include <stdlib.h>
+#define RAND() (rand() & 0x7fff)
+#endif
+
 inline u64 OmegaUtilityDriver_generate_handle();
