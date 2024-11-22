@@ -270,7 +270,7 @@ typedef struct
 #define RAND() (rand() & 0x7fff)
 #endif
 
-inline u64 OmegaUtilityDriver_generate_handle();
+u64 OmegaUtilityDriver_generate_handle();
 
 #ifdef __cplusplus
 }
