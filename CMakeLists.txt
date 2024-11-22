@@ -25,4 +25,11 @@ if(ESP_PLATFORM)
         #submodules/third-party/STC/include/stc/priv
         #submodules/third-party/STC/include/stc
         #)
+else()
+    cmake_minimum_required(VERSION 3.8)
+    project(OmegaUtilityDriver)
+    set( HEADERS inc )
+    set( SOURCES src/OmegaUtilityDriver.c)
+    set(SOURCE_FILES ${SOURCES} ${HEADERS})
+    add_library(OmegaUtilityDriver STATIC ${SOURCE_FILES})
 endif(ESP_PLATFORM)
