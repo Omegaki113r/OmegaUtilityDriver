@@ -20,4 +20,12 @@
  * ----------	---	---------------------------------------------------------
  */
 
+#include <vector>
 #include "OmegaUtilityDriver.hpp"
+
+internal std::vector<u64> _s_handles;
+
+inline u64 OmegaUtilityDriver_generate_handle(){
+    return ((u64)RAND() << 48) ^ ((u64)RAND() << 35) ^ ((u64)RAND() << 22) ^
+             ((u64)RAND() << 9) ^ ((u64)RAND() >> 4);
+}
