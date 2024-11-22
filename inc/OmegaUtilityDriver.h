@@ -133,8 +133,8 @@ extern "C"
 #define OMEGA_HEX_LOGE(buffer, length)
 #endif
 
-#define MAX(x, y) (((x) > (y)) ? (x) : (y))
-#define MIN(x, y) (((x) < (y)) ? (x) : (y))
+#define OMEGA_MAX(x, y) (((x) > (y)) ? (x) : (y))
+#define OMEGA_MIN(x, y) (((x) < (y)) ? (x) : (y))
 
 #define internal static
 #ifndef UNUSED
