@@ -1,6 +1,6 @@
 if(ESP_PLATFORM)
     set( HEADERS inc )
-    set( SOURCES src/OmegaUtilityDriver.c)
+    set( SOURCES src/OmegaUtilityDriver.cpp)
 
     idf_component_register( SRCS            ${SOURCES}
                             INCLUDE_DIRS    ${HEADERS}
