@@ -11,9 +11,8 @@ else()
     cmake_minimum_required(VERSION 3.8)
     project(OmegaUtilityDriver)
     set( HEADERS inc )
-    set( SOURCES src/OmegaUtilityDriver.c)
+    set( SOURCES src/OmegaUtilityDriver.cpp)
 
-    
     add_library(OmegaUtilityDriver STATIC ${SOURCES})
     target_include_directories(OmegaUtilityDriver PUBLIC ${HEADERS})
-endif(ESP_PLATFORM)
+endif()
