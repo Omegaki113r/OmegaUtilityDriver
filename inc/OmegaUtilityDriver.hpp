@@ -26,6 +26,11 @@
 
 #pragma once
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include <stdint.h>
 
 #if ESP_PLATFORM
@@ -266,3 +271,7 @@ typedef struct
 #endif
 
 inline u64 OmegaUtilityDriver_generate_handle();
+
+#ifdef __cplusplus
+}
+#endif
