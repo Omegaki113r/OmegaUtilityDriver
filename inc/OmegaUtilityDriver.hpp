@@ -265,4 +265,6 @@ typedef struct
 #define RAND() (rand() & 0x7fff)
 #endif
 
-u64 OmegaUtilityDriver_generate_handle();
+typedef u64 OmegaHandle;
+
+OmegaHandle OmegaUtilityDriver_generate_handle();
