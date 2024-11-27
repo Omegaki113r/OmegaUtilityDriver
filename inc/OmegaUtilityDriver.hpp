@@ -214,6 +214,8 @@
     typedef int16_t i16;
     typedef uint64_t u64;
     typedef int64_t i64;
+    typedef uint32_t u32;
+    typedef int32_t i32;
 
 #define CREATE_BUFFER_U8(name, ...) u8 name[] = {__VA_ARGS__};
 #define CREATE_BUFFER_U16(name, ...) u16 name[] = {__VA_ARGS__};
