@@ -243,11 +243,28 @@ typedef enum
 {
     eSUCCESS,
     eFAILED,
+    eUNKNOWN,
     eTIMEOUT,
     eNOT_INITED,
     eALREADY_INITED,
     eNOT_STARTED,
     eALREADY_STARTED,
+    /// @brief Indicates API misuse of using invalid `FileSystemOpenMode` in `OmegaFileSystemController_open_file()`
+    eFSC_INVALID_OPENMODE,
+    /// @brief Indicates failure fir to invalid parameters
+    eFSC_INVALID_PARAMETERS,
+    /// @brief Indicates a failure "File Not existing on the file system" when calling `OmegaFileSystemController_open_file()` with READING only
+    eFSC_FILE_NOT_EXIST,
+    /// @brief Indicates a API misuse of invalid parameter of type FileHandle being received to functions
+    eFSC_FILE_HANDLE_NOT_EXIST,
+    /// @brief Indicates failure due to not having enough heap memory needed to allocate for the operation
+    eFSC_NO_MEM,
+    /// @brief Indicates a failure during file writing operation. All the content were no written to the file
+    eFSC_INCOMPLETE_FILE_WRITE,
+    /// @brief Indicates the end of file reading a file
+    eFSC_END_OF_FILE,
+    /// @brief //!TODO: Implement the usage of this inside `OmegaFileSystemController_open_file()`
+    eFSC_FILE_ALREADY_OPENED,
 }OmegaStatus;
 
 #define OMEGA_GPIO_PORT_NC NULL
