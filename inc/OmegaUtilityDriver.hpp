@@ -286,5 +286,8 @@ typedef struct
 
 typedef u64 OmegaHandle;
 
+namespace Omega
+{
 OmegaHandle OmegaUtilityDriver_generate_handle();
 bool OmegaHandleGenerator_delete_handle(OmegaHandle);
+} // namespace Omega
