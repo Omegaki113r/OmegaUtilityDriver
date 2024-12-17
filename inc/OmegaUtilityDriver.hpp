@@ -286,13 +286,6 @@ typedef struct
 
 typedef u64 OmegaHandle;
 
-#if ESP_PLATFORM && OMEGA_ESP_HARDWARE_GEN
-#include <esp_random.h>
-#define RAND() (esp_random() & 0x7fff)
-#else
-#define RAND() (rand() & 0x7fff)
-#endif
-
 namespace Omega
 {
 OmegaHandle OmegaUtilityDriver_generate_handle();
