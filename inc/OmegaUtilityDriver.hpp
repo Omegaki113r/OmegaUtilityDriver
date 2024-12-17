@@ -288,6 +288,9 @@ typedef u64 OmegaHandle;
 
 namespace Omega
 {
-OmegaHandle OmegaUtilityDriver_generate_handle();
-bool OmegaHandleGenerator_delete_handle(OmegaHandle);
+    namespace UtilityDriver
+    {
+        OmegaHandle generate_handle();
+        bool delete_handle(OmegaHandle);
+    } // namespace UtilityDriver
 } // namespace Omega
