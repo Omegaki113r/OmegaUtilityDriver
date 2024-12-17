@@ -287,3 +287,4 @@ typedef struct
 typedef u64 OmegaHandle;
 
 OmegaHandle OmegaUtilityDriver_generate_handle();
+bool OmegaHandleGenerator_delete_handle(OmegaHandle);
