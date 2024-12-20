@@ -60,6 +60,10 @@ namespace Omega
         bool delete_handle(OmegaHandle in_handle)
         {
             bool ret = false;
+            if(0 == in_handle){
+                OMEGA_LOGE("Provided Handle in invalid: %lld", in_handle);
+                goto response;
+            }
             if (auto iterator = std::ranges::find(_s_handles, in_handle); iterator != _s_handles.end())
             {
                 _s_handles.erase(iterator);
