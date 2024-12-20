@@ -61,7 +61,7 @@ namespace Omega
         {
             bool ret = false;
             if(0 == in_handle){
-                OMEGA_LOGE("Provided Handle in invalid: %lld", in_handle);
+                OMEGA_LOGE("Provided Handle is invalid: %lld", in_handle);
                 goto response;
             }
             if (auto iterator = std::ranges::find(_s_handles, in_handle); iterator != _s_handles.end())
