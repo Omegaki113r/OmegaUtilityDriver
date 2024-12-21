@@ -24,6 +24,13 @@
 #include <algorithm>
 #include <vector>
 
+void __attribute__((constructor)) OmegaLoggingInitialized();
+
+void OmegaLoggingInitialized()
+{
+    printf("%s\r\n", "Logging Initialized");
+}
+
         constexpr internal u8 MAX_ITERATION_AMOUNT = 100;
         internal std::vector<OmegaHandle> _s_handles{};
 
