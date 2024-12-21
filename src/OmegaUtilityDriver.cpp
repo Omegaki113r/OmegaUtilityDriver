@@ -24,14 +24,10 @@
 #include <algorithm>
 #include <vector>
 
-namespace Omega
-{
-    namespace UtilityDriver
-    {
         constexpr internal u8 MAX_ITERATION_AMOUNT = 100;
         internal std::vector<OmegaHandle> _s_handles{};
 
-        OmegaHandle generate_handle()
+        OmegaHandle OmegaUtilityDriver_generate_handle()
         {
             u64 iteration_count = 0;
             u64 generated_handle = 0;
@@ -57,7 +53,7 @@ namespace Omega
             return generated_handle;
         }
 
-        bool delete_handle(OmegaHandle in_handle)
+        bool OmegaUtilityDriver_delete_handle(OmegaHandle in_handle)
         {
             bool ret = false;
             if(0 == in_handle){
@@ -74,5 +70,3 @@ namespace Omega
             OMEGA_LOGV("Deleting Handle: %llu, Vector Size: %d", in_handle, _s_handles.size());
             return ret;
         }
-    } // namespace UtilityDriver
-} // namespace Omega
