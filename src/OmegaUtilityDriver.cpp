@@ -49,7 +49,7 @@
             }
             _s_handles.push_back(generated_handle);
         response:
-            OMEGA_LOGV("Generated Handle: %llu, Vector Size: %d", generated_handle, _s_handles.size());
+            OMEGA_LOGD("Generated Handle: %llu, Vector Size: %d", generated_handle, _s_handles.size());
             return generated_handle;
         }
 
@@ -67,6 +67,6 @@
                 goto response;
             }
         response:
-            OMEGA_LOGV("Deleting Handle: %llu, Vector Size: %d", in_handle, _s_handles.size());
+            OMEGA_LOGD("Deleting Handle: %llu, Vector Size: %d", in_handle, _s_handles.size());
             return ret;
         }
