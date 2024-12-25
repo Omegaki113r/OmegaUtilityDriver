@@ -19,4 +19,5 @@
 
     add_library(OmegaUtilityDriver STATIC ${SOURCES})
     target_include_directories(OmegaUtilityDriver PUBLIC ${HEADERS})
+    target_link_options(OmegaUtilityDriver PRIVATE -static-libgcc -static-libstdc++)
 #endif()
