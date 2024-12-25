@@ -10,6 +10,10 @@
 #else()
     cmake_minimum_required(VERSION 3.10)
     project(OmegaUtilityDriver)
+
+    set(CMAKE_CXX_STANDARD 23)  # Change to 23 if you want C++23
+    set(CMAKE_CXX_STANDARD_REQUIRED ON)  # Make it required
+    
     set( HEADERS inc )
     set( SOURCES src/OmegaUtilityDriver.cpp)
 
