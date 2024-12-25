@@ -20,9 +20,11 @@
  * ----------	---	---------------------------------------------------------
  */
 
-#include "OmegaUtilityDriver.hpp"
 #include <algorithm>
 #include <vector>
+#include <cstdio>
+
+#include "OmegaUtilityDriver.hpp"
 
 void __attribute__((constructor)) OmegaLoggingInitialized();
 
