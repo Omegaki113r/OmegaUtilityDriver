@@ -286,5 +286,13 @@ struct CHeapDeleter {
     }
 };
 
+#if __has_include(<cJSON.h>) || __has_include(<cJSON/cJSON.h>)
+struct cJSONDeleter {
+    void operator()(cJSON* ptr) const {
+        cJSON_Delete(ptr);
+    }
+};
+#endif
+
 OmegaHandle OmegaUtilityDriver_generate_handle();
 bool OmegaUtilityDriver_delete_handle(OmegaHandle);
