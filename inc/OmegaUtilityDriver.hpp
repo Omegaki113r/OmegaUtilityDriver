@@ -287,6 +287,12 @@ struct CHeapDeleter {
 };
 
 #if __has_include(<cJSON.h>) || __has_include(<cJSON/cJSON.h>)
+#if __has_include(<cJSON.h>)
+    #include <cJSON.h>
+#endif
+#if __has_include(<cJSON/cJSON.h>)
+    #include <cJSON/cJSON.h>
+#endif
 struct cJSONDeleter {
     void operator()(cJSON* ptr) const {
         cJSON_Delete(ptr);
