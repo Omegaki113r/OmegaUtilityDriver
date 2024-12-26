@@ -280,5 +280,11 @@ typedef struct
 
 typedef u64 OmegaHandle;
 
+struct CHeapDeleter {
+    void operator()(void* ptr) const {
+        free(ptr);
+    }
+};
+
 OmegaHandle OmegaUtilityDriver_generate_handle();
 bool OmegaUtilityDriver_delete_handle(OmegaHandle);
