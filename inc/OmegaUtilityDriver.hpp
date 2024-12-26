@@ -282,7 +282,7 @@ typedef u64 OmegaHandle;
 
 struct CHeapDeleter {
     void operator()(void* ptr) const {
-        free(ptr);
+        omega_free(ptr);
     }
 };
 
