@@ -180,6 +180,12 @@
         sscanf(str, STR2MAC_STRING, &addr[0], &addr[1], &addr[2], &addr[3], &addr[4], &addr[5]); \
     } while (0)
 
+#if ESP_PLATFORM && CONFIG_SPIRAM
+#define omega_psmalloc(size) heap_caps_malloc(size, MALLOC_CAP_SPIRAM)
+#else
+#error "SPIRAM not available"
+#endif
+
 #if ESP_PLATFORM
 #if CONFIG_SPIRAM
 #define omega_malloc(size) heap_caps_malloc(size, MALLOC_CAP_SPIRAM)
