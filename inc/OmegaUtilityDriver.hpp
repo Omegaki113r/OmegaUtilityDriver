@@ -308,3 +308,11 @@ struct cJSONDeleter {
 
 OmegaHandle OmegaUtilityDriver_generate_handle();
 bool OmegaUtilityDriver_delete_handle(OmegaHandle);
+
+#define ARENA_SIZE 1024 * 1024  // 1MB arena size
+typedef struct {
+    char *arena_start;   // Pointer to the beginning of the arena
+    char *arena_end;     // Pointer to the end of the arena
+    char *current_pos;   // Pointer to the current position for the next allocation
+} Arena;
+
