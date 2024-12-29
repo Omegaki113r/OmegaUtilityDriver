@@ -79,3 +79,34 @@ void OmegaLoggingInitialized()
             // OMEGA_LOGD("Deleting Handle: %llu, Vector Size: %d", in_handle, _s_handles.size());
             return ret;
         }
+
+
+// Initialize the arena with a given size
+int arena_init(Arena *arena, size_t size) {
+    arena->arena_start = (char *)malloc(size);
+    if (arena->arena_start == NULL) {
+        return -1;  // Memory allocation failed
+    }
+    arena->arena_end = arena->arena_start + size;
+    arena->current_pos = arena->arena_start;
+    return 0;  // Success
+}
+
+// Allocate memory from the arena
+void *arena_alloc(Arena *arena, size_t size) {
+    if (arena->current_pos + size > arena->arena_end) {
+        return NULL;  // Not enough space in the arena
+    }
+
+    void *block = arena->current_pos;
+    arena->current_pos += size;
+    return block;
+}
+
+// Free the entire arena
+void arena_free(Arena *arena) {
+    free(arena->arena_start);
+    arena->arena_start = NULL;
+    arena->arena_end = NULL;
+    arena->current_pos = NULL;
+}
