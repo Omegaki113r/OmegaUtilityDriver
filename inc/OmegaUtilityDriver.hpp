@@ -319,12 +319,48 @@ typedef struct {
 #define POOL_SIZE (10*1024)  // Total size of the memory pool (in bytes)
 #define CHUNK_SIZE 32   // Size of each chunk (in bytes)
 
-typedef struct MemoryPool {
-    uint8_t pool[POOL_SIZE];      // The actual memory pool
-    size_t free_index;            // The index of the next available chunk
-    void* free_list;              // Pointer to the free list of available chunks
-} MemoryPool;
+template <std::size_t POOL_SIZE, std::size_t CHUNK_SIZE>
+class MemoryPool {
+public:
+    // The actual memory pool (raw storage)
+    uint8_t pool[POOL_SIZE];
 
-void pool_init(MemoryPool *mp);
-void *pool_allocate(MemoryPool *mp, size_t size);
-void pool_free(MemoryPool *mp, void *ptr);
+    // Free list pointer, initially pointing to the first chunk
+    void* free_list;
+
+    // Constructor: initializes the pool and the free list
+    MemoryPool() {
+        static_assert(POOL_SIZE % CHUNK_SIZE == 0, "POOL_SIZE must be a multiple of CHUNK_SIZE");
+
+        free_list = static_cast<void*>(pool);
+        uint8_t* ptr = pool;
+
+        // Initialize free list: each chunk points to the next one
+        std::size_t num_chunks = POOL_SIZE / CHUNK_SIZE;
+        for (std::size_t i = 0; i < num_chunks - 1; ++i) {
+            *(reinterpret_cast<void**>(ptr)) = ptr + CHUNK_SIZE;
+            ptr += CHUNK_SIZE;
+        }
+        *(reinterpret_cast<void**>(ptr)) = nullptr;  // Last chunk points to nullptr (end of list)
+    }
+
+    // Allocate memory from the pool
+    void* allocate() {
+        if (free_list == nullptr) {
+            std::cerr << "Error: No memory left in the pool.\n";
+            return nullptr;
+        }
+
+        // Take a chunk from the free list
+        void* ptr = free_list;
+        free_list = *(reinterpret_cast<void**>(ptr));  // Update free list to point to the next free chunk
+        return ptr;
+    }
+
+    // Free a chunk and return it to the pool
+    void free(void* ptr) {
+        // Return the chunk to the free list
+        *(reinterpret_cast<void**>(ptr)) = free_list;
+        free_list = ptr;
+    }
+};
