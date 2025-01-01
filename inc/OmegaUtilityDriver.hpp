@@ -344,7 +344,7 @@ public:
     // Allocate memory from the pool
     void* allocate() {
         if (free_list == nullptr) {
-            std::cerr << "Error: No memory left in the pool.\n";
+            OMEGA_LOGE("Error: No memory left in the pool.");
             return nullptr;
         }
 
