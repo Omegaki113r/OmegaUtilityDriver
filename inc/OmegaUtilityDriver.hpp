@@ -344,15 +344,15 @@ public:
     // Allocate memory for multiple objects (batch allocation)
     void* allocate(std::size_t count=1) {
         if (free_list == nullptr) {
-            std::cerr << "Error: No memory left in the pool.\n";
+            OMEGA_LOGE("Error: No memory left in the pool.");
             return nullptr;
         }
 
         // Calculate the total size required for the requested number of objects
-        std::size_t total_size = count * CHUNK_SIZE;
+        std::size_t total_size = count * cSZ;
 
-        if (total_size > POOL_SIZE) {
-            std::cerr << "Error: Not enough memory for the requested allocation.\n";
+        if (total_size > pSZ) {
+            OMEGA_LOGE("Error: Not enough memory for the requested allocation.");
             return nullptr;
         }
 
