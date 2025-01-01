@@ -316,3 +316,51 @@ typedef struct {
     char *current_pos;   // Pointer to the current position for the next allocation
 } Arena;
 
+#define POOL_SIZE (10*1024)  // Total size of the memory pool (in bytes)
+#define CHUNK_SIZE 32   // Size of each chunk (in bytes)
+
+typedef struct MemoryPool {
+    uint8_t pool[POOL_SIZE];      // The actual memory pool
+    size_t free_index;            // The index of the next available chunk
+    void* free_list;              // Pointer to the free list of available chunks
+} MemoryPool;
+
+// Initialize the memory pool
+void pool_init(MemoryPool *mp) {
+    mp->free_index = 0;  // Initialize free_index to 0 (beginning of the pool)
+    mp->free_list = NULL;  // No free chunks initially
+}
+
+// Allocate memory from the pool
+void *pool_allocate(MemoryPool *mp, size_t size) {
+    // Check if the requested size exceeds the chunk size
+    if (size > CHUNK_SIZE) {
+        printf("Error: Requested size exceeds chunk size.\n");
+        return NULL;
+    }
+
+    // If there's a free list, take from it
+    if (mp->free_list != NULL) {
+        void* ptr = mp->free_list;
+        mp->free_list = *((void**)ptr);  // Update the free list to the next free chunk
+        return ptr;
+    }
+
+    // Check if there is enough space left in the pool
+    if (mp->free_index + size > POOL_SIZE) {
+        printf("Error: Not enough memory in the pool.\n");
+        return NULL;
+    }
+
+    // Return a pointer to the current free memory and advance the free index
+    void *ptr = mp->pool + mp->free_index;
+    mp->free_index += size;  // Move the free index forward
+    return ptr;
+}
+
+// Free a chunk in the pool and add it to the free list
+void pool_free(MemoryPool *mp, void *ptr) {
+    // Add the freed chunk to the free list
+    *((void**)ptr) = mp->free_list;  // Point the freed chunk to the previous free list
+    mp->free_list = ptr;  // Update the free list to point to the newly freed chunk
+}
