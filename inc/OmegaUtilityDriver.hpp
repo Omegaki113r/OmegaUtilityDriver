@@ -341,23 +341,43 @@ public:
         *(reinterpret_cast<void**>(ptr)) = nullptr;  // Last chunk points to nullptr (end of list)
     }
 
-    // Allocate memory from the pool
-    void* allocate() {
+    // Allocate memory for multiple objects (batch allocation)
+    void* allocate(std::size_t count) {
         if (free_list == nullptr) {
-            OMEGA_LOGE("Error: No memory left in the pool.");
+            std::cerr << "Error: No memory left in the pool.\n";
             return nullptr;
         }
 
-        // Take a chunk from the free list
+        // Calculate the total size required for the requested number of objects
+        std::size_t total_size = count * CHUNK_SIZE;
+
+        if (total_size > POOL_SIZE) {
+            std::cerr << "Error: Not enough memory for the requested allocation.\n";
+            return nullptr;
+        }
+
+        // Allocate contiguous blocks of memory
         void* ptr = free_list;
-        free_list = *(reinterpret_cast<void**>(ptr));  // Update free list to point to the next free chunk
+        void* next_free = ptr;
+        for (std::size_t i = 1; i < count; ++i) {
+            next_free = *(reinterpret_cast<void**>(next_free));
+        }
+
+        // Update the free list
+        free_list = *(reinterpret_cast<void**>(next_free));
+
         return ptr;
     }
 
-    // Free a chunk and return it to the pool
-    void free(void* ptr) {
+    // Free a contiguous block of memory
+    void free(void* ptr, std::size_t count) {
         // Return the chunk to the free list
-        *(reinterpret_cast<void**>(ptr)) = free_list;
-        free_list = ptr;
+        void* next_free = ptr;
+        for (std::size_t i = 0; i < count; ++i) {
+            void* current = next_free;
+            next_free = *(reinterpret_cast<void**>(current));
+            *(reinterpret_cast<void**>(current)) = free_list;
+            free_list = current;
+        }
     }
 };
