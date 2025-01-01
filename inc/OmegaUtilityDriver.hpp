@@ -342,7 +342,7 @@ public:
     }
 
     // Allocate memory for multiple objects (batch allocation)
-    void* allocate(std::size_t count) {
+    void* allocate(std::size_t count=1) {
         if (free_list == nullptr) {
             std::cerr << "Error: No memory left in the pool.\n";
             return nullptr;
@@ -370,7 +370,7 @@ public:
     }
 
     // Free a contiguous block of memory
-    void free(void* ptr, std::size_t count) {
+    void free(void* ptr, std::size_t count=1) {
         // Return the chunk to the free list
         void* next_free = ptr;
         for (std::size_t i = 0; i < count; ++i) {
