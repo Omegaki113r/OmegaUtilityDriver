@@ -316,27 +316,27 @@ typedef struct {
     char *current_pos;   // Pointer to the current position for the next allocation
 } Arena;
 
-template <std::size_t POOL_SIZE, std::size_t CHUNK_SIZE>
+template <std::size_t pSZ, std::size_t cSZ>
 class MemoryPool {
 public:
     // The actual memory pool (raw storage)
-    uint8_t pool[POOL_SIZE];
+    uint8_t pool[pSZ];
 
     // Free list pointer, initially pointing to the first chunk
     void* free_list;
 
     // Constructor: initializes the pool and the free list
     MemoryPool() {
-        static_assert(POOL_SIZE % CHUNK_SIZE == 0, "POOL_SIZE must be a multiple of CHUNK_SIZE");
+        static_assert(pSZ % cSZ == 0, "poll size must be a multiple of chunk size");
 
         free_list = static_cast<void*>(pool);
         uint8_t* ptr = pool;
 
         // Initialize free list: each chunk points to the next one
-        std::size_t num_chunks = POOL_SIZE / CHUNK_SIZE;
+        std::size_t num_chunks = pSZ / cSZ;
         for (std::size_t i = 0; i < num_chunks - 1; ++i) {
-            *(reinterpret_cast<void**>(ptr)) = ptr + CHUNK_SIZE;
-            ptr += CHUNK_SIZE;
+            *(reinterpret_cast<void**>(ptr)) = ptr + cSZ;
+            ptr += cSZ;
         }
         *(reinterpret_cast<void**>(ptr)) = nullptr;  // Last chunk points to nullptr (end of list)
     }
