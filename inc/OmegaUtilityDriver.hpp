@@ -183,7 +183,7 @@
 #if ESP_PLATFORM && CONFIG_SPIRAM
 #define omega_psmalloc(size) heap_caps_malloc(size, MALLOC_CAP_SPIRAM)
 #else
-#error "SPIRAM not available"
+#define omega_psmalloc(size) NULL
 #endif
 
 #if ESP_PLATFORM
