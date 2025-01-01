@@ -316,9 +316,6 @@ typedef struct {
     char *current_pos;   // Pointer to the current position for the next allocation
 } Arena;
 
-#define POOL_SIZE (10*1024)  // Total size of the memory pool (in bytes)
-#define CHUNK_SIZE 32   // Size of each chunk (in bytes)
-
 template <std::size_t POOL_SIZE, std::size_t CHUNK_SIZE>
 class MemoryPool {
 public:
