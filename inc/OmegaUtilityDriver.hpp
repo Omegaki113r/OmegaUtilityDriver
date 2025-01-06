@@ -259,7 +259,11 @@ inline void delay(unsigned long long in_delay)
 #define OMEGA_BIT_CLEAR(x,bit) (x & ~(OMEGA_BIT(bit)))
 #define OMEGA_BIT_CHECK(x,bit) (x & (1<<bit))
 
+#ifdef __cplusplus
+enum class
+#else
 typedef enum
+#endif
 {
     eSUCCESS,
     eFAILED,
