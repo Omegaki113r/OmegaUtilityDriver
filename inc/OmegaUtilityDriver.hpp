@@ -147,17 +147,17 @@
 
 #ifdef __cplusplus
 
-constexpr int operator"" _ms(int in_milliseconds)
+constexpr int operator"" _ms(unsigned long long in_milliseconds)
 {
     return in_milliseconds;
 }
 
-constexpr int operator"" _s(int in_seconds)
+constexpr int operator"" _s(unsigned long long in_seconds)
 {
     return S_TO_MS(in_seconds);
 }
 
-inline void delay(int in_delay)
+inline void delay(unsigned long long in_delay)
 {
     delay_ms(in_delay);
 }
