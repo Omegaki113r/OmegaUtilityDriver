@@ -28,10 +28,6 @@
 
 #include <stdint.h>
 
-#ifdef __cplusplus
-#define fn auto
-#endif
-
 #if ESP_PLATFORM
 #include <esp_heap_caps.h>
 #endif
