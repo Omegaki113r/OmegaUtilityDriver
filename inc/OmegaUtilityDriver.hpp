@@ -42,6 +42,7 @@
 
 #define US_TO_MS(x) (x/1000)
 #define US_TO_S(x) (x/(1000*1000))
+#define S_TO_MS(x) (x*1000)
 
 #define STRINGIFY(s) #s
 
@@ -143,6 +144,25 @@
 #include <freertos/task.h>
 #define delay_ms(x) vTaskDelay(pdMS_TO_TICKS(x))
 #define delay_s(x) vTaskDelay(pdMS_TO_TICKS(x * 1000))
+
+#ifdef __cplusplus
+
+constexpr int operator"" _ms(int in_milliseconds)
+{
+    return in_milliseconds;
+}
+
+constexpr int operator"" _s(int in_seconds)
+{
+    return S_TO_MS(in_seconds);
+}
+
+inline void delay(int in_delay)
+{
+    delay_ms(in_delay);
+}
+
+#endif
 #endif
 
 #define GPIO_LEVEL_LOW 0
