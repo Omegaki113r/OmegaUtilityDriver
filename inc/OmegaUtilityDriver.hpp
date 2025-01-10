@@ -294,7 +294,7 @@ typedef enum
 #else
     #define OMEGA_GPIO_NC ((OmegaGPIO_t){.port = OMEGA_GPIO_PORT_NC,.pin = OMEGA_GPIO_PIN_NC})
 #endif
-typedef struct
+struct OmegaGPIO
 {
 #ifndef ESP_PLATFORM
     void* port;
@@ -304,7 +304,7 @@ typedef struct
         if(other.pin == pin) return true;
         return false;
     }
-}OmegaGPIO;
+};
 
 #if ESP_PLATFORM
 #include <esp_random.h>
