@@ -300,7 +300,7 @@ struct OmegaGPIO
     void* port;
 #endif    
     u32 pin;
-    bool operator==(OmegaGPIO other) const{
+    bool operator==(OmegaGPIO other) const {
         if(other.pin == pin) return true;
         return false;
     }
