@@ -300,6 +300,10 @@ typedef struct
     void* port;
 #endif    
     u32 pin;
+    bool operator==(OmegaGPIO other) const{
+        if(other.pin == pin) return true;
+        return false;
+    }
 }OmegaGPIO;
 
 #if ESP_PLATFORM
