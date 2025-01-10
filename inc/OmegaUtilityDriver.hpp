@@ -292,7 +292,9 @@ typedef enum
 #define OMEGA_GPIO_NC ((OmegaGPIO_t){.port = NULL,.pin = -1})
 typedef struct
 {
+#ifndef ESP_PLATFORM
     void* port;
+#endif    
     int32_t pin;
 }OmegaGPIO_t;
 
