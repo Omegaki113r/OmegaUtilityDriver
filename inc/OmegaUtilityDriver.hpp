@@ -289,14 +289,18 @@ typedef enum
 
 #define OMEGA_GPIO_PORT_NC NULL
 #define OMEGA_GPIO_PIN_NC -1
-#define OMEGA_GPIO_NC ((OmegaGPIO_t){.port = NULL,.pin = -1})
+#ifdef ESP_PLATFORM
+    #define OMEGA_GPIO_NC ((OmegaGPIO_t){.pin = OMEGA_GPIO_PIN_NC})
+#else
+    #define OMEGA_GPIO_NC ((OmegaGPIO_t){.port = OMEGA_GPIO_PORT_NC,.pin = OMEGA_GPIO_PIN_NC})
+#endif
 typedef struct
 {
 #ifndef ESP_PLATFORM
     void* port;
 #endif    
-    int32_t pin;
-}OmegaGPIO_t;
+    u32 pin;
+}OmegaGPIO;
 
 #if ESP_PLATFORM
 #include <esp_random.h>
