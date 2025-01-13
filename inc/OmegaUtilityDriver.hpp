@@ -40,6 +40,8 @@
 #define US_TO_S(x) (x/(1000*1000))
 #define S_TO_MS(x) (x*1000)
 
+#define CHAR2INT(x) (('0' <= x && x <= '9') ? (x - '0') : (('a' <= x && x <= 'f') ? (10 + (x - 'a')) : (('A' <= x && x <= 'F') ? (10 + (x - 'A')) : (0))))
+
 #define STRINGIFY(s) #s
 
 #define START_ESCAPE_LOGGING_PARAMETER "\033["
