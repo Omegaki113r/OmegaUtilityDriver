@@ -341,6 +341,51 @@ struct cJSONDeleter {
 OmegaHandle OmegaUtilityDriver_generate_handle();
 bool OmegaUtilityDriver_delete_handle(OmegaHandle);
 
+
+#define UUID2ARRAY(uuid)                                      \
+      (uint8_t[])                                             \
+      {                                                       \
+            16 * CHAR2INT(uuid[34]) + CHAR2INT(uuid[35]),     \
+                16 * CHAR2INT(uuid[32]) + CHAR2INT(uuid[33]), \
+                16 * CHAR2INT(uuid[30]) + CHAR2INT(uuid[31]), \
+                16 * CHAR2INT(uuid[28]) + CHAR2INT(uuid[29]), \
+                16 * CHAR2INT(uuid[26]) + CHAR2INT(uuid[27]), \
+                16 * CHAR2INT(uuid[24]) + CHAR2INT(uuid[25]), \
+                16 * CHAR2INT(uuid[21]) + CHAR2INT(uuid[22]), \
+                16 * CHAR2INT(uuid[19]) + CHAR2INT(uuid[20]), \
+                16 * CHAR2INT(uuid[16]) + CHAR2INT(uuid[17]), \
+                16 * CHAR2INT(uuid[14]) + CHAR2INT(uuid[15]), \
+                16 * CHAR2INT(uuid[11]) + CHAR2INT(uuid[12]), \
+                16 * CHAR2INT(uuid[9]) + CHAR2INT(uuid[10]),  \
+                16 * CHAR2INT(uuid[6]) + CHAR2INT(uuid[7]),   \
+                16 * CHAR2INT(uuid[4]) + CHAR2INT(uuid[5]),   \
+                16 * CHAR2INT(uuid[2]) + CHAR2INT(uuid[3]),   \
+                16 * CHAR2INT(uuid[0]) + CHAR2INT(uuid[1]),   \
+      }
+
+#define UUID2LIST(uuid)                                 \
+      16 * CHAR2INT(uuid[34]) + CHAR2INT(uuid[35]),     \
+          16 * CHAR2INT(uuid[32]) + CHAR2INT(uuid[33]), \
+          16 * CHAR2INT(uuid[30]) + CHAR2INT(uuid[31]), \
+          16 * CHAR2INT(uuid[28]) + CHAR2INT(uuid[29]), \
+          16 * CHAR2INT(uuid[26]) + CHAR2INT(uuid[27]), \
+          16 * CHAR2INT(uuid[24]) + CHAR2INT(uuid[25]), \
+          16 * CHAR2INT(uuid[21]) + CHAR2INT(uuid[22]), \
+          16 * CHAR2INT(uuid[19]) + CHAR2INT(uuid[20]), \
+          16 * CHAR2INT(uuid[16]) + CHAR2INT(uuid[17]), \
+          16 * CHAR2INT(uuid[14]) + CHAR2INT(uuid[15]), \
+          16 * CHAR2INT(uuid[11]) + CHAR2INT(uuid[12]), \
+          16 * CHAR2INT(uuid[9]) + CHAR2INT(uuid[10]),  \
+          16 * CHAR2INT(uuid[6]) + CHAR2INT(uuid[7]),   \
+          16 * CHAR2INT(uuid[4]) + CHAR2INT(uuid[5]),   \
+          16 * CHAR2INT(uuid[2]) + CHAR2INT(uuid[3]),   \
+          16 * CHAR2INT(uuid[0]) + CHAR2INT(uuid[1])
+
+#define UUID128(name, ...) \
+      uint8_t name[16] = {__VA_ARGS__};
+
+
+
 #define ARENA_SIZE 1024 * 1024  // 1MB arena size
 typedef struct {
     char *arena_start;   // Pointer to the beginning of the arena
