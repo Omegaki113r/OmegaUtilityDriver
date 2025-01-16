@@ -59,6 +59,10 @@
 #define PROFILE_TEXT_COLOR "38;5;207"
 #define END_PARAMETER "m"
 
+inline long map(long x, long in_min, long in_max, long out_min, long out_max) {
+    return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+}
+
 #if CONFIG_OMEGA_LOGGING
     static inline void OmegLoggingSystemController_log_hex(const char *initial_text, const char *file_name, const char *function_name, const size_t line_number, const char *text_color, void *buffer, size_t length)
     {
