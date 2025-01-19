@@ -133,6 +133,7 @@ inline T map(T x, T in_min, T in_max, T out_min, T out_max) {
 #define OMEGA_MIN(x, y) (((x) < (y)) ? (x) : (y))
 
 #define internal static
+#define global static
 #ifndef UNUSED
 #define UNUSED(arg) (void)arg
 #endif
