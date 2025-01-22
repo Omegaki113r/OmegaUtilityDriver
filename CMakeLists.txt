@@ -8,7 +8,7 @@ if(ESP_PLATFORM)
     
     idf_component_register( 
                             INCLUDE_DIRS    ${HEADERS}
-                            # SRCS            ${SOURCES}
+                            SRCS            ${SOURCES}
     )
     set_property(TARGET ${COMPONENT_LIB} PROPERTY C_STANDARD 23)
 else()

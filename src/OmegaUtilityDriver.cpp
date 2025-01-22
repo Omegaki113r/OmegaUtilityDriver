@@ -24,7 +24,7 @@
 #include <cstdio>
 #include <vector>
 
-#include "OmegaUtilityDriver.hpp"
+#include "OmegaUtilityDriver/UtilityDriver.hpp"
 
 void __attribute__((constructor)) OmegaLoggingInitialized()
 {
