@@ -209,6 +209,7 @@ inline void delay(unsigned long long in_delay)
 #endif
 
 #define MAC_ADDRESS_BUFFER_LENGTH 6
+#define IP_ADDRESS_STRING_BUFFER_LENGTH 17
 #define MAC_ADDRESS_STRING_BUFFER_LENGTH 17
 #define MAC2STR_STRING "%02x:%02x:%02x:%02x:%02x:%02x"
 #define STR2MAC_STRING "%hhx:%hhx:%hhx:%hhx:%hhx:%hhx"
