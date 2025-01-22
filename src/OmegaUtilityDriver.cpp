@@ -10,7 +10,7 @@
  * File Created: Tuesday, 2nd July 2024 1:01:18 pm
  * Author: Omegaki113r (omegaki113r@gmail.com)
  * -----
- * Last Modified: Wednesday, 22nd January 2025 6:48:09 pm
+ * Last Modified: Wednesday, 22nd January 2025 8:33:15 pm
  * Modified By: Omegaki113r (omegaki113r@gmail.com)
  * -----
  * Copyright 2024 - 2024 0m3g4ki113r, Xtronic
@@ -26,9 +26,7 @@
 
 #include "OmegaUtilityDriver.hpp"
 
-void __attribute__((constructor)) OmegaLoggingInitialized();
-
-void OmegaLoggingInitialized()
+void __attribute__((constructor)) OmegaLoggingInitialized()
 {
     printf("%s\r\n", "Logging Initialized");
 }

@@ -10,7 +10,7 @@
  * File Created: Tuesday, 2nd July 2024 12:59:59 pm
  * Author: Omegaki113r (omegaki113r@gmail.com)
  * -----
- * Last Modified: Wednesday, 22nd January 2025 8:22:45 pm
+ * Last Modified: Wednesday, 22nd January 2025 9:56:29 pm
  * Modified By: Omegaki113r (omegaki113r@gmail.com)
  * -----
  * Copyright 2024 - 2024 0m3g4ki113r, Xtronic
@@ -28,19 +28,39 @@
 
 #include <stdint.h>
 
-#if ESP_PLATFORM
-#include <esp_heap_caps.h>
+typedef uint8_t u8;
+typedef int8_t i8;
+typedef uint16_t u16;
+typedef int16_t i16;
+typedef uint64_t u64;
+typedef int64_t i64;
+typedef uint32_t u32;
+typedef int32_t i32;
+
+typedef u64 OmegaHandle;
+
+#define internal static
+#define global static
+#ifndef UNUSED
+#define UNUSED(arg) (void)arg
 #endif
 
 #ifndef __FILE_NAME__
 #define __FILE_NAME__ __FILE__
 #endif
 
-#define US_TO_MS(x) (x / 1000)
-#define US_TO_S(x) (x / (1000 * 1000))
-#define S_TO_MS(x) (x * 1000)
+#define PERIPHERAL_CORE 0
+#define APP_CORE 1
 
-#define CHAR2INT(x) (('0' <= x && x <= '9') ? (x - '0') : (('a' <= x && x <= 'f') ? (10 + (x - 'a')) : (('A' <= x && x <= 'F') ? (10 + (x - 'A')) : (0))))
+#define GPIO_LEVEL_LOW 0
+#define GPIO_LEVEL_HIGH 1
+
+#define OMEGA_BIT(x) (1 << x)
+#define OMEGA_LSHIFT(x, count) (x >> count)
+#define OMEGA_RSHIFT(x, count) (x << count)
+#define OMEGA_BIT_SET(x, bit) (x | OMEGA_BIT(bit))
+#define OMEGA_BIT_CLEAR(x, bit) (x & ~(OMEGA_BIT(bit)))
+#define OMEGA_BIT_CHECK(x, bit) (x & (1 << bit))
 
 #define STRINGIFY(s) #s
 
@@ -124,18 +144,42 @@ static inline void OmegLoggingSystemController_log_hex(const char *initial_text,
 #define OMEGA_HEX_LOGE(buffer, length)
 #endif
 
-#define OMEGA_MAX(x, y) (((x) > (y)) ? (x) : (y))
-#define OMEGA_MIN(x, y) (((x) < (y)) ? (x) : (y))
+// #if ESP_PLATFORM
+// #include <esp_heap_caps.h>
+// #endif
 
-#define internal static
-#define global static
-#ifndef UNUSED
-#define UNUSED(arg) (void)arg
+#ifdef __cplusplus
+template <typename T>
+inline constexpr T US_TO_MS(T in_us) noexcept { return in_us / 1000; }
+template <typename T>
+inline constexpr T MS_TO_S(T in_ms) noexcept { return in_ms / 1000; }
+template <typename T>
+inline constexpr T US_TO_S(T in_us) noexcept { return in_us / (1000 * 1000); }
+template <typename T>
+inline constexpr T S_TO_MS(T in_s) noexcept { return in_s * 1000; }
+template <typename T>
+inline constexpr T MS_TO_US(T in_ms) noexcept { return in_ms * 1000; }
+template <typename T>
+inline constexpr T S_TO_US(T in_s) noexcept { return in_s * 1000 * 1000; }
+#else
+#define US_TO_MS(x) (x / 1000)
+#define MS_TO_S(x) (x / 1000)
+#define US_TO_S(x) (x / (1000 * 1000))
+#define S_TO_MS(x) (x * 1000)
+#define MS_TO_US(x) (x * 1000)
+#define S_TO_US(x) (x * 1000 * 1000)
 #endif
 
-#if ESP_PLATFORM
-#define PERIPHERAL_CORE 0
-#define APP_CORE 1
+#define CHAR2INT(x) (('0' <= x && x <= '9') ? (x - '0') : (('a' <= x && x <= 'f') ? (10 + (x - 'a')) : (('A' <= x && x <= 'F') ? (10 + (x - 'A')) : (0))))
+
+#ifdef __cplusplus
+template <typename T>
+inline constexpr T OMEGA_MAX(T in1, T in2) noexcept { return (((in1) > (in2)) ? (in1) : (in2)); }
+template <typename T>
+inline constexpr T OMEGA_MIN(T in1, T in2) noexcept { return (((in1) < (in2)) ? (in1) : (in2)); }
+#else
+#define OMEGA_MAX(x, y) (((x) > (y)) ? (x) : (y))
+#define OMEGA_MIN(x, y) (((x) < (y)) ? (x) : (y))
 #endif
 
 #if __has_include(<freertos/FreeRTOS.h>)
@@ -163,18 +207,6 @@ inline void delay(unsigned long long in_delay)
 
 #endif
 #endif
-
-typedef uint8_t u8;
-typedef int8_t i8;
-typedef uint16_t u16;
-typedef int16_t i16;
-typedef uint64_t u64;
-typedef int64_t i64;
-typedef uint32_t u32;
-typedef int32_t i32;
-
-#define GPIO_LEVEL_LOW 0
-#define GPIO_LEVEL_HIGH 1
 
 #define MAC_ADDRESS_BUFFER_LENGTH 6
 #define MAC_ADDRESS_STRING_BUFFER_LENGTH 17
@@ -214,21 +246,17 @@ typedef int32_t i32;
 
 #if ESP_PLATFORM && CONFIG_SPIRAM
 #define omega_psmalloc(size) heap_caps_malloc(size, MALLOC_CAP_SPIRAM)
-#else
-#define omega_psmalloc(size) NULL
-#endif
-
-#if ESP_PLATFORM
-#if CONFIG_SPIRAM
-#define omega_malloc(size) heap_caps_malloc(size, MALLOC_CAP_SPIRAM)
-#define omega_realloc(prev_ptr, new_size) heap_caps_realloc(prev_ptr, new_size, MALLOC_CAP_SPIRAM)
-#define omega_free(ptr)      \
+#define omega_psfree(ptr)    \
     do                       \
     {                        \
         heap_caps_free(ptr); \
-        ptr = NULL;          \
+        ptr = NULL           \
     } while (0)
 #else
+#define omega_psmalloc(size) NULL
+#define omega_psfree(ptr)
+#endif
+
 #define omega_malloc(size) malloc(size)
 #define omega_realloc(prev_ptr, new_size) realloc(prev_ptr, new_size)
 #define omega_free(ptr) \
@@ -237,8 +265,6 @@ typedef int32_t i32;
         free(ptr);      \
         ptr = NULL;     \
     } while (0)
-#endif
-#endif
 
 #define CREATE_BUFFER_U8(name, ...) u8 name[] = {__VA_ARGS__};
 #define CREATE_BUFFER_U16(name, ...) u16 name[] = {__VA_ARGS__};
@@ -254,13 +280,6 @@ typedef int32_t i32;
 #define STATIC_EMPTY_CREATE_BUFFER_U8(name, size) static u8 name[size] = {0};
 #define STATIC_EMPTY_CREATE_BUFFER_U16(name, size) static u16 name[size] = {0};
 #define STATIC_EMPTY_CREATE_BUFFER_FLOAT(name, size) static float name[size] = {0};
-
-#define OMEGA_BIT(x) (1 << x)
-#define OMEGA_LSHIFT(x, count) (x >> count)
-#define OMEGA_RSHIFT(x, count) (x << count)
-#define OMEGA_BIT_SET(x, bit) (x | OMEGA_BIT(bit))
-#define OMEGA_BIT_CLEAR(x, bit) (x & ~(OMEGA_BIT(bit)))
-#define OMEGA_BIT_CHECK(x, bit) (x & (1 << bit))
 
 typedef enum
 {
@@ -319,8 +338,6 @@ struct OmegaGPIO
 #define RAND() (rand() & 0x7fff)
 #endif
 
-typedef u64 OmegaHandle;
-
 OmegaHandle OmegaUtilityDriver_generate_handle();
 bool OmegaUtilityDriver_delete_handle(OmegaHandle);
 
@@ -367,7 +384,6 @@ bool OmegaUtilityDriver_delete_handle(OmegaHandle);
     uint8_t name[16] = {__VA_ARGS__};
 
 #ifdef __cplusplus
-
 struct CHeapDeleter
 {
     void operator()(void *ptr) const
@@ -375,13 +391,17 @@ struct CHeapDeleter
         omega_free(ptr);
     }
 };
+#endif
 
+#ifdef __cplusplus
 template <typename T>
 inline T map(T x, T in_min, T in_max, T out_min, T out_max)
 {
     return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
+#endif
 
+#ifdef __cplusplus
 #if __has_include(<cJSON.h>) || __has_include(<cJSON/cJSON.h>)
 #if __has_include(<cJSON.h>)
 #include <cJSON.h>
@@ -397,7 +417,9 @@ struct cJSONDeleter
     }
 };
 #endif
+#endif
 
+#ifdef __cplusplus
 template <size_t arena_size>
 class StaticArenaAllocator
 {
