@@ -10,7 +10,7 @@
  * File Created: Tuesday, 2nd July 2024 1:01:18 pm
  * Author: Omegaki113r (omegaki113r@gmail.com)
  * -----
- * Last Modified: Tuesday, 17th December 2024 1:59:27 pm
+ * Last Modified: Wednesday, 22nd January 2025 6:48:09 pm
  * Modified By: Omegaki113r (omegaki113r@gmail.com)
  * -----
  * Copyright 2024 - 2024 0m3g4ki113r, Xtronic
@@ -21,8 +21,8 @@
  */
 
 #include <algorithm>
-#include <vector>
 #include <cstdio>
+#include <vector>
 
 #include "OmegaUtilityDriver.hpp"
 
@@ -33,80 +33,50 @@ void OmegaLoggingInitialized()
     printf("%s\r\n", "Logging Initialized");
 }
 
-        constexpr internal u8 MAX_ITERATION_AMOUNT = 100;
-        internal std::vector<OmegaHandle> _s_handles{};
+constexpr internal u8 MAX_ITERATION_AMOUNT = 100;
+internal std::vector<OmegaHandle> _s_handles{};
 
-        OmegaHandle OmegaUtilityDriver_generate_handle()
+OmegaHandle OmegaUtilityDriver_generate_handle()
+{
+    u64 iteration_count = 0;
+    u64 generated_handle = 0;
+    do
+    {
+    regenerate_handle:
+        generated_handle = ((u64)RAND() << 48) ^ ((u64)RAND() << 35) ^ ((u64)RAND() << 22) ^
+                           ((u64)RAND() << 9) ^ ((u64)RAND() >> 4);
+        if (std::find(_s_handles.begin(), _s_handles.end(), generated_handle) != _s_handles.end())
         {
-            u64 iteration_count = 0;
-            u64 generated_handle = 0;
-            do
-            {
-                regenerate_handle:
-                    generated_handle = ((u64)RAND() << 48) ^ ((u64)RAND() << 35) ^ ((u64)RAND() << 22) ^
-                                       ((u64)RAND() << 9) ^ ((u64)RAND() >> 4);
-                if (std::find(_s_handles.begin(), _s_handles.end(), generated_handle) != _s_handles.end())
-                {
-                    goto regenerate_handle;
-                }
-            } while (generated_handle <= 0 && iteration_count++ < MAX_ITERATION_AMOUNT);
-            if (iteration_count >= MAX_ITERATION_AMOUNT)
-            {
-                OMEGA_LOGE("Unable to create valid handle");
-                generated_handle = 0;
-                goto response;
-            }
-            _s_handles.push_back(generated_handle);
-        response:
-            // OMEGA_LOGD("Generated Handle: %llu, Vector Size: %d", generated_handle, _s_handles.size());
-            return generated_handle;
+            goto regenerate_handle;
         }
-
-        bool OmegaUtilityDriver_delete_handle(OmegaHandle in_handle)
-        {
-            bool ret = false;
-            if(0 == in_handle){
-                OMEGA_LOGE("Provided Handle is invalid: %lld", in_handle);
-                goto response;
-            }
-            if (auto iterator = std::ranges::find(_s_handles, in_handle); iterator != _s_handles.end())
-            {
-                _s_handles.erase(iterator);
-                ret = true;
-                goto response;
-            }
-        response:
-            // OMEGA_LOGD("Deleting Handle: %llu, Vector Size: %d", in_handle, _s_handles.size());
-            return ret;
-        }
-
-
-// Initialize the arena with a given size
-int arena_init(Arena *arena, size_t size) {
-    arena->arena_start = (char *)malloc(size);
-    if (arena->arena_start == NULL) {
-        return -1;  // Memory allocation failed
+    } while (generated_handle <= 0 && iteration_count++ < MAX_ITERATION_AMOUNT);
+    if (iteration_count >= MAX_ITERATION_AMOUNT)
+    {
+        OMEGA_LOGE("Unable to create valid handle");
+        generated_handle = 0;
+        goto response;
     }
-    arena->arena_end = arena->arena_start + size;
-    arena->current_pos = arena->arena_start;
-    return 0;  // Success
+    _s_handles.push_back(generated_handle);
+response:
+    // OMEGA_LOGD("Generated Handle: %llu, Vector Size: %d", generated_handle, _s_handles.size());
+    return generated_handle;
 }
 
-// Allocate memory from the arena
-void *arena_alloc(Arena *arena, size_t size) {
-    if (arena->current_pos + size > arena->arena_end) {
-        return NULL;  // Not enough space in the arena
+bool OmegaUtilityDriver_delete_handle(OmegaHandle in_handle)
+{
+    bool ret = false;
+    if (0 == in_handle)
+    {
+        OMEGA_LOGE("Provided Handle is invalid: %lld", in_handle);
+        goto response;
     }
-
-    void *block = arena->current_pos;
-    arena->current_pos += size;
-    return block;
-}
-
-// Free the entire arena
-void arena_free(Arena *arena) {
-    free(arena->arena_start);
-    arena->arena_start = NULL;
-    arena->arena_end = NULL;
-    arena->current_pos = NULL;
+    if (auto iterator = std::ranges::find(_s_handles, in_handle); iterator != _s_handles.end())
+    {
+        _s_handles.erase(iterator);
+        ret = true;
+        goto response;
+    }
+response:
+    // OMEGA_LOGD("Deleting Handle: %llu, Vector Size: %d", in_handle, _s_handles.size());
+    return ret;
 }

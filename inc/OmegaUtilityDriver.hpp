@@ -10,7 +10,7 @@
  * File Created: Tuesday, 2nd July 2024 12:59:59 pm
  * Author: Omegaki113r (omegaki113r@gmail.com)
  * -----
- * Last Modified: Wednesday, 11th September 2024 12:27:48 am
+ * Last Modified: Wednesday, 22nd January 2025 8:22:45 pm
  * Modified By: Omegaki113r (omegaki113r@gmail.com)
  * -----
  * Copyright 2024 - 2024 0m3g4ki113r, Xtronic
@@ -36,9 +36,9 @@
 #define __FILE_NAME__ __FILE__
 #endif
 
-#define US_TO_MS(x) (x/1000)
-#define US_TO_S(x) (x/(1000*1000))
-#define S_TO_MS(x) (x*1000)
+#define US_TO_MS(x) (x / 1000)
+#define US_TO_S(x) (x / (1000 * 1000))
+#define S_TO_MS(x) (x * 1000)
 
 #define CHAR2INT(x) (('0' <= x && x <= '9') ? (x - '0') : (('a' <= x && x <= 'f') ? (10 + (x - 'a')) : (('A' <= x && x <= 'F') ? (10 + (x - 'A')) : (0))))
 
@@ -59,57 +59,52 @@
 #define PROFILE_TEXT_COLOR "38;5;207"
 #define END_PARAMETER "m"
 
-template<typename T>
-inline T map(T x, T in_min, T in_max, T out_min, T out_max) {
-    return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-}
-
 #if CONFIG_OMEGA_LOGGING
-    static inline void OmegLoggingSystemController_log_hex(const char *initial_text, const char *file_name, const char *function_name, const size_t line_number, const char *text_color, void *buffer, size_t length)
+static inline void OmegLoggingSystemController_log_hex(const char *initial_text, const char *file_name, const char *function_name, const size_t line_number, const char *text_color, void *buffer, size_t length)
+{
+    char ascii[17];
+    size_t i, j;
+    ascii[16] = '\0';
+    for (i = 0; i < length; ++i)
     {
-        char ascii[17];
-        size_t i, j;
-        ascii[16] = '\0';
-        for (i = 0; i < length; ++i)
+        if (i % 16 == 0)
         {
-            if (i % 16 == 0)
+            printf(initial_text, file_name, function_name, line_number);
+            printf(START_ESCAPE_LOGGING_PARAMETER "%s" END_PARAMETER, text_color);
+        }
+        printf("%02X ", ((unsigned char *)buffer)[i]);
+        if (((unsigned char *)buffer)[i] >= ' ' && ((unsigned char *)buffer)[i] <= '~')
+        {
+            ascii[i % 16] = ((unsigned char *)buffer)[i];
+        }
+        else
+        {
+            ascii[i % 16] = '.';
+        }
+        if ((i + 1) % 8 == 0 || i + 1 == length)
+        {
+            printf(" ");
+            if ((i + 1) % 16 == 0)
             {
-                printf(initial_text, file_name, function_name, line_number);
-                printf(START_ESCAPE_LOGGING_PARAMETER "%s" END_PARAMETER, text_color);
+                printf("|%s|\n", ascii);
             }
-            printf("%02X ", ((unsigned char *)buffer)[i]);
-            if (((unsigned char *)buffer)[i] >= ' ' && ((unsigned char *)buffer)[i] <= '~')
+            else if (i + 1 == length)
             {
-                ascii[i % 16] = ((unsigned char *)buffer)[i];
-            }
-            else
-            {
-                ascii[i % 16] = '.';
-            }
-            if ((i + 1) % 8 == 0 || i + 1 == length)
-            {
-                printf(" ");
-                if ((i + 1) % 16 == 0)
+                ascii[(i + 1) % 16] = '\0';
+                if ((i + 1) % 16 <= 8)
                 {
-                    printf("|%s|\n", ascii);
+                    printf(" ");
                 }
-                else if (i + 1 == length)
+                for (j = (i + 1) % 16; j < 16; ++j)
                 {
-                    ascii[(i + 1) % 16] = '\0';
-                    if ((i + 1) % 16 <= 8)
-                    {
-                        printf(" ");
-                    }
-                    for (j = (i + 1) % 16; j < 16; ++j)
-                    {
-                        printf("   ");
-                    }
-                    printf("|%s|\n", ascii);
+                    printf("   ");
                 }
+                printf("|%s|\n", ascii);
             }
         }
-        printf(END_ESCAPE_LOGGIN_PARAMETER);
     }
+    printf(END_ESCAPE_LOGGIN_PARAMETER);
+}
 #define OMEGA_LOGD(format, ...) printf(START_ESCAPE_LOGGING_PARAMETER DETAILED_BACKGROUND_FOREGROUND_COLOR END_PARAMETER " %s >> %s:%d " END_ESCAPE_LOGGIN_PARAMETER "" START_ESCAPE_LOGGING_PARAMETER DEBUG_BACKGROUND_FOREGROUND_COLOR END_PARAMETER " [D] " END_ESCAPE_LOGGIN_PARAMETER " " START_ESCAPE_LOGGING_PARAMETER DEBUG_TEXT_COLOR END_PARAMETER format END_ESCAPE_LOGGIN_PARAMETER "\r\n", __func__, __FILE_NAME__, __LINE__, ##__VA_ARGS__)
 #define OMEGA_LOGI(format, ...) printf(START_ESCAPE_LOGGING_PARAMETER DETAILED_BACKGROUND_FOREGROUND_COLOR END_PARAMETER " %s >> %s:%d " END_ESCAPE_LOGGIN_PARAMETER "" START_ESCAPE_LOGGING_PARAMETER INFO_BACKGROUND_FOREGROUND_COLOR END_PARAMETER " [I] " END_ESCAPE_LOGGIN_PARAMETER " " START_ESCAPE_LOGGING_PARAMETER INFO_TEXT_COLOR END_PARAMETER format END_ESCAPE_LOGGIN_PARAMETER "\r\n", __func__, __FILE_NAME__, __LINE__, ##__VA_ARGS__)
 #define OMEGA_LOGW(format, ...) printf(START_ESCAPE_LOGGING_PARAMETER DETAILED_BACKGROUND_FOREGROUND_COLOR END_PARAMETER " %s >> %s:%d " END_ESCAPE_LOGGIN_PARAMETER "" START_ESCAPE_LOGGING_PARAMETER WARN_BACKGROUND_FOREGROUND_COLOR END_PARAMETER " [W] " END_ESCAPE_LOGGIN_PARAMETER " " START_ESCAPE_LOGGING_PARAMETER WARN_TEXT_COLOR END_PARAMETER format END_ESCAPE_LOGGIN_PARAMETER "\r\n", __func__, __FILE_NAME__, __LINE__, ##__VA_ARGS__)
@@ -168,6 +163,15 @@ inline void delay(unsigned long long in_delay)
 
 #endif
 #endif
+
+typedef uint8_t u8;
+typedef int8_t i8;
+typedef uint16_t u16;
+typedef int16_t i16;
+typedef uint64_t u64;
+typedef int64_t i64;
+typedef uint32_t u32;
+typedef int32_t i32;
 
 #define GPIO_LEVEL_LOW 0
 #define GPIO_LEVEL_HIGH 1
@@ -236,15 +240,6 @@ inline void delay(unsigned long long in_delay)
 #endif
 #endif
 
-    typedef uint8_t u8;
-    typedef int8_t i8;
-    typedef uint16_t u16;
-    typedef int16_t i16;
-    typedef uint64_t u64;
-    typedef int64_t i64;
-    typedef uint32_t u32;
-    typedef int32_t i32;
-
 #define CREATE_BUFFER_U8(name, ...) u8 name[] = {__VA_ARGS__};
 #define CREATE_BUFFER_U16(name, ...) u16 name[] = {__VA_ARGS__};
 #define CREATE_BUFFER_FLOAT(name, ...) float name[] = {__VA_ARGS__};
@@ -260,12 +255,12 @@ inline void delay(unsigned long long in_delay)
 #define STATIC_EMPTY_CREATE_BUFFER_U16(name, size) static u16 name[size] = {0};
 #define STATIC_EMPTY_CREATE_BUFFER_FLOAT(name, size) static float name[size] = {0};
 
-#define OMEGA_BIT(x) (1<<x)
-#define OMEGA_LSHIFT(x,count) (x>>count)
-#define OMEGA_RSHIFT(x,count) (x<<count)
-#define OMEGA_BIT_SET(x, bit) (x|OMEGA_BIT(bit))
-#define OMEGA_BIT_CLEAR(x,bit) (x & ~(OMEGA_BIT(bit)))
-#define OMEGA_BIT_CHECK(x,bit) (x & (1<<bit))
+#define OMEGA_BIT(x) (1 << x)
+#define OMEGA_LSHIFT(x, count) (x >> count)
+#define OMEGA_RSHIFT(x, count) (x << count)
+#define OMEGA_BIT_SET(x, bit) (x | OMEGA_BIT(bit))
+#define OMEGA_BIT_CLEAR(x, bit) (x & ~(OMEGA_BIT(bit)))
+#define OMEGA_BIT_CHECK(x, bit) (x & (1 << bit))
 
 typedef enum
 {
@@ -293,23 +288,25 @@ typedef enum
     eFSC_END_OF_FILE,
     /// @brief //!TODO: Implement the usage of this inside `OmegaFileSystemController_open_file()`
     eFSC_FILE_ALREADY_OPENED,
-}OmegaStatus;
+} OmegaStatus;
 
 #define OMEGA_GPIO_PORT_NC NULL
 #define OMEGA_GPIO_PIN_NC -1
 #ifdef ESP_PLATFORM
-    #define OMEGA_GPIO_NC ((OmegaGPIO_t){.pin = OMEGA_GPIO_PIN_NC})
+#define OMEGA_GPIO_NC ((OmegaGPIO_t){.pin = OMEGA_GPIO_PIN_NC})
 #else
-    #define OMEGA_GPIO_NC ((OmegaGPIO_t){.port = OMEGA_GPIO_PORT_NC,.pin = OMEGA_GPIO_PIN_NC})
+#define OMEGA_GPIO_NC ((OmegaGPIO_t){.port = OMEGA_GPIO_PORT_NC, .pin = OMEGA_GPIO_PIN_NC})
 #endif
 struct OmegaGPIO
 {
 #ifndef ESP_PLATFORM
-    void* port;
-#endif    
+    void *port;
+#endif
     u32 pin;
-    bool operator==(OmegaGPIO other) const {
-        if(other.pin == pin) return true;
+    bool operator==(OmegaGPIO other) const
+    {
+        if (other.pin == pin)
+            return true;
         return false;
     }
 };
@@ -324,143 +321,138 @@ struct OmegaGPIO
 
 typedef u64 OmegaHandle;
 
-struct CHeapDeleter {
-    void operator()(void* ptr) const {
+OmegaHandle OmegaUtilityDriver_generate_handle();
+bool OmegaUtilityDriver_delete_handle(OmegaHandle);
+
+#define UUID2ARRAY(uuid)                                  \
+    (uint8_t[])                                           \
+    {                                                     \
+        16 * CHAR2INT(uuid[34]) + CHAR2INT(uuid[35]),     \
+            16 * CHAR2INT(uuid[32]) + CHAR2INT(uuid[33]), \
+            16 * CHAR2INT(uuid[30]) + CHAR2INT(uuid[31]), \
+            16 * CHAR2INT(uuid[28]) + CHAR2INT(uuid[29]), \
+            16 * CHAR2INT(uuid[26]) + CHAR2INT(uuid[27]), \
+            16 * CHAR2INT(uuid[24]) + CHAR2INT(uuid[25]), \
+            16 * CHAR2INT(uuid[21]) + CHAR2INT(uuid[22]), \
+            16 * CHAR2INT(uuid[19]) + CHAR2INT(uuid[20]), \
+            16 * CHAR2INT(uuid[16]) + CHAR2INT(uuid[17]), \
+            16 * CHAR2INT(uuid[14]) + CHAR2INT(uuid[15]), \
+            16 * CHAR2INT(uuid[11]) + CHAR2INT(uuid[12]), \
+            16 * CHAR2INT(uuid[9]) + CHAR2INT(uuid[10]),  \
+            16 * CHAR2INT(uuid[6]) + CHAR2INT(uuid[7]),   \
+            16 * CHAR2INT(uuid[4]) + CHAR2INT(uuid[5]),   \
+            16 * CHAR2INT(uuid[2]) + CHAR2INT(uuid[3]),   \
+            16 * CHAR2INT(uuid[0]) + CHAR2INT(uuid[1]),   \
+    }
+
+#define UUID2LIST(uuid)                               \
+    16 * CHAR2INT(uuid[34]) + CHAR2INT(uuid[35]),     \
+        16 * CHAR2INT(uuid[32]) + CHAR2INT(uuid[33]), \
+        16 * CHAR2INT(uuid[30]) + CHAR2INT(uuid[31]), \
+        16 * CHAR2INT(uuid[28]) + CHAR2INT(uuid[29]), \
+        16 * CHAR2INT(uuid[26]) + CHAR2INT(uuid[27]), \
+        16 * CHAR2INT(uuid[24]) + CHAR2INT(uuid[25]), \
+        16 * CHAR2INT(uuid[21]) + CHAR2INT(uuid[22]), \
+        16 * CHAR2INT(uuid[19]) + CHAR2INT(uuid[20]), \
+        16 * CHAR2INT(uuid[16]) + CHAR2INT(uuid[17]), \
+        16 * CHAR2INT(uuid[14]) + CHAR2INT(uuid[15]), \
+        16 * CHAR2INT(uuid[11]) + CHAR2INT(uuid[12]), \
+        16 * CHAR2INT(uuid[9]) + CHAR2INT(uuid[10]),  \
+        16 * CHAR2INT(uuid[6]) + CHAR2INT(uuid[7]),   \
+        16 * CHAR2INT(uuid[4]) + CHAR2INT(uuid[5]),   \
+        16 * CHAR2INT(uuid[2]) + CHAR2INT(uuid[3]),   \
+        16 * CHAR2INT(uuid[0]) + CHAR2INT(uuid[1])
+
+#define UUID128(name, ...) \
+    uint8_t name[16] = {__VA_ARGS__};
+
+#ifdef __cplusplus
+
+struct CHeapDeleter
+{
+    void operator()(void *ptr) const
+    {
         omega_free(ptr);
     }
 };
 
+template <typename T>
+inline T map(T x, T in_min, T in_max, T out_min, T out_max)
+{
+    return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+}
+
 #if __has_include(<cJSON.h>) || __has_include(<cJSON/cJSON.h>)
 #if __has_include(<cJSON.h>)
-    #include <cJSON.h>
+#include <cJSON.h>
 #endif
 #if __has_include(<cJSON/cJSON.h>)
-    #include <cJSON/cJSON.h>
+#include <cJSON/cJSON.h>
 #endif
-struct cJSONDeleter {
-    void operator()(cJSON* ptr) const {
+struct cJSONDeleter
+{
+    void operator()(cJSON *ptr) const
+    {
         cJSON_Delete(ptr);
     }
 };
 #endif
 
-OmegaHandle OmegaUtilityDriver_generate_handle();
-bool OmegaUtilityDriver_delete_handle(OmegaHandle);
-
-
-#define UUID2ARRAY(uuid)                                      \
-      (uint8_t[])                                             \
-      {                                                       \
-            16 * CHAR2INT(uuid[34]) + CHAR2INT(uuid[35]),     \
-                16 * CHAR2INT(uuid[32]) + CHAR2INT(uuid[33]), \
-                16 * CHAR2INT(uuid[30]) + CHAR2INT(uuid[31]), \
-                16 * CHAR2INT(uuid[28]) + CHAR2INT(uuid[29]), \
-                16 * CHAR2INT(uuid[26]) + CHAR2INT(uuid[27]), \
-                16 * CHAR2INT(uuid[24]) + CHAR2INT(uuid[25]), \
-                16 * CHAR2INT(uuid[21]) + CHAR2INT(uuid[22]), \
-                16 * CHAR2INT(uuid[19]) + CHAR2INT(uuid[20]), \
-                16 * CHAR2INT(uuid[16]) + CHAR2INT(uuid[17]), \
-                16 * CHAR2INT(uuid[14]) + CHAR2INT(uuid[15]), \
-                16 * CHAR2INT(uuid[11]) + CHAR2INT(uuid[12]), \
-                16 * CHAR2INT(uuid[9]) + CHAR2INT(uuid[10]),  \
-                16 * CHAR2INT(uuid[6]) + CHAR2INT(uuid[7]),   \
-                16 * CHAR2INT(uuid[4]) + CHAR2INT(uuid[5]),   \
-                16 * CHAR2INT(uuid[2]) + CHAR2INT(uuid[3]),   \
-                16 * CHAR2INT(uuid[0]) + CHAR2INT(uuid[1]),   \
-      }
-
-#define UUID2LIST(uuid)                                 \
-      16 * CHAR2INT(uuid[34]) + CHAR2INT(uuid[35]),     \
-          16 * CHAR2INT(uuid[32]) + CHAR2INT(uuid[33]), \
-          16 * CHAR2INT(uuid[30]) + CHAR2INT(uuid[31]), \
-          16 * CHAR2INT(uuid[28]) + CHAR2INT(uuid[29]), \
-          16 * CHAR2INT(uuid[26]) + CHAR2INT(uuid[27]), \
-          16 * CHAR2INT(uuid[24]) + CHAR2INT(uuid[25]), \
-          16 * CHAR2INT(uuid[21]) + CHAR2INT(uuid[22]), \
-          16 * CHAR2INT(uuid[19]) + CHAR2INT(uuid[20]), \
-          16 * CHAR2INT(uuid[16]) + CHAR2INT(uuid[17]), \
-          16 * CHAR2INT(uuid[14]) + CHAR2INT(uuid[15]), \
-          16 * CHAR2INT(uuid[11]) + CHAR2INT(uuid[12]), \
-          16 * CHAR2INT(uuid[9]) + CHAR2INT(uuid[10]),  \
-          16 * CHAR2INT(uuid[6]) + CHAR2INT(uuid[7]),   \
-          16 * CHAR2INT(uuid[4]) + CHAR2INT(uuid[5]),   \
-          16 * CHAR2INT(uuid[2]) + CHAR2INT(uuid[3]),   \
-          16 * CHAR2INT(uuid[0]) + CHAR2INT(uuid[1])
-
-#define UUID128(name, ...) \
-      uint8_t name[16] = {__VA_ARGS__};
-
-
-
-#define ARENA_SIZE 1024 * 1024  // 1MB arena size
-typedef struct {
-    char *arena_start;   // Pointer to the beginning of the arena
-    char *arena_end;     // Pointer to the end of the arena
-    char *current_pos;   // Pointer to the current position for the next allocation
-} Arena;
-
-template <std::size_t pSZ, std::size_t cSZ>
-class MemoryPool {
+template <size_t arena_size>
+class StaticArenaAllocator
+{
 public:
-    // The actual memory pool (raw storage)
-    uint8_t pool[pSZ];
-
-    // Free list pointer, initially pointing to the first chunk
-    void* free_list;
-
-    // Constructor: initializes the pool and the free list
-    MemoryPool() {
-        static_assert(pSZ % cSZ == 0, "poll size must be a multiple of chunk size");
-
-        free_list = static_cast<void*>(pool);
-        uint8_t* ptr = pool;
-
-        // Initialize free list: each chunk points to the next one
-        std::size_t num_chunks = pSZ / cSZ;
-        for (std::size_t i = 0; i < num_chunks - 1; ++i) {
-            *(reinterpret_cast<void**>(ptr)) = ptr + cSZ;
-            ptr += cSZ;
-        }
-        *(reinterpret_cast<void**>(ptr)) = nullptr;  // Last chunk points to nullptr (end of list)
-    }
-
-    // Allocate memory for multiple objects (batch allocation)
-    void* allocate(std::size_t count=1) {
-        if (free_list == nullptr) {
-            OMEGA_LOGE("Error: No memory left in the pool.");
+    template <typename T>
+    T *allocate(size_t count = 1) noexcept
+    {
+        const size_t required_memory = count * sizeof(T);
+        if (used_memory + required_memory > arena_size)
+        {
+            OMEGA_LOGE("Not enough space in arena");
             return nullptr;
         }
-
-        // Calculate the total size required for the requested number of objects
-        std::size_t total_size = count * cSZ;
-
-        if (total_size > pSZ) {
-            OMEGA_LOGE("Error: Not enough memory for the requested allocation.");
-            return nullptr;
-        }
-
-        // Allocate contiguous blocks of memory
-        void* ptr = free_list;
-        void* next_free = ptr;
-        for (std::size_t i = 1; i < count; ++i) {
-            next_free = *(reinterpret_cast<void**>(next_free));
-        }
-
-        // Update the free list
-        free_list = *(reinterpret_cast<void**>(next_free));
-
+        T *ptr = reinterpret_cast<T *>(arena + used_memory);
+        used_memory += required_memory;
         return ptr;
     }
 
-    // Free a contiguous block of memory
-    void free(void* ptr, std::size_t count=1) {
-        // Return the chunk to the free list
-        void* next_free = ptr;
-        for (std::size_t i = 0; i < count; ++i) {
-            void* current = next_free;
-            next_free = *(reinterpret_cast<void**>(current));
-            *(reinterpret_cast<void**>(current)) = free_list;
-            free_list = current;
-        }
-    }
+    void reset() noexcept { used_memory = 0; }
+    size_t remaining() const noexcept { return arena_size - used_memory; }
+
+private:
+    size_t used_memory = 0;
+    alignas(1) u8 arena[arena_size];
 };
+
+#else
+typedef struct
+{
+    uint8_t *arena;
+    size_t size;
+    size_t used;
+} StaticArenaAllocator;
+
+#define INIT_ARENA(allocator, buffer)      \
+    do                                     \
+    {                                      \
+        (allocator).arena = (buffer);      \
+        (allocator).size = sizeof(buffer); \
+        (allocator).used = 0;              \
+    } while (0)
+#define ARENA_ALLOC(allocator, type, count) \
+    ((type *)arenaAllocate(&(allocator), sizeof(type) * (count)))
+
+void *arenaAllocate(StaticArenaAllocator *allocator, size_t size)
+{
+    if (allocator->used + size > allocator->size)
+    {
+        OMEGA_LOGE("Arena overflow: not enough memory!");
+        return NULL;
+    }
+    void *ptr = allocator->arena + allocator->used;
+    allocator->used += size;
+    return ptr;
+}
+void resetArenaAllocator(StaticArenaAllocator *allocator) { allocator->used = 0; }
+size_t remainingMemory(StaticArenaAllocator *allocator) { return allocator->size - allocator->used; }
+#endif
