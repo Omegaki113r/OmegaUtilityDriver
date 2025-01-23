@@ -26,7 +26,8 @@
 
 #pragma once
 
-#include <stdint.h>
+#include <cstdint>
+#include <cstddef>
 
 typedef uint8_t u8;
 typedef int8_t i8;
