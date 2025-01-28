@@ -10,7 +10,7 @@
  * File Created: Tuesday, 2nd July 2024 12:59:59 pm
  * Author: Omegaki113r (omegaki113r@gmail.com)
  * -----
- * Last Modified: Tuesday, 28th January 2025 6:03:09 pm
+ * Last Modified: Tuesday, 28th January 2025 6:15:30 pm
  * Modified By: Omegaki113r (omegaki113r@gmail.com)
  * -----
  * Copyright 2024 - 2024 0m3g4ki113r, Xtronic
@@ -26,8 +26,8 @@
 
 #pragma once
 
-#include <cstdint>
 #include <cstddef>
+#include <cstdint>
 #include <cstdio>
 
 typedef uint8_t u8;
@@ -204,7 +204,7 @@ constexpr int operator"" _ms(unsigned long long in_milliseconds)
 
 constexpr int operator"" _s(unsigned long long in_seconds)
 {
-    return S_TO_MS(in_seconds);
+    return S_TO_US(in_seconds);
 }
 
 inline void delay(unsigned long long in_delay)
