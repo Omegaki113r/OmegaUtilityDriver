@@ -10,7 +10,7 @@
  * File Created: Tuesday, 2nd July 2024 12:59:59 pm
  * Author: Omegaki113r (omegaki113r@gmail.com)
  * -----
- * Last Modified: Wednesday, 22nd January 2025 9:56:29 pm
+ * Last Modified: Tuesday, 28th January 2025 6:03:09 pm
  * Modified By: Omegaki113r (omegaki113r@gmail.com)
  * -----
  * Copyright 2024 - 2024 0m3g4ki113r, Xtronic
@@ -190,9 +190,14 @@ inline constexpr T OMEGA_MIN(T in1, T in2) noexcept { return (((in1) < (in2)) ? 
 
 #ifdef __cplusplus
 
+constexpr int operator"" _us(unsigned long long in_microseconds)
+{
+    return in_microseconds;
+}
+
 constexpr int operator"" _ms(unsigned long long in_milliseconds)
 {
-    return in_milliseconds;
+    return MS_TO_US(in_milliseconds);
 }
 
 constexpr int operator"" _s(unsigned long long in_seconds)
