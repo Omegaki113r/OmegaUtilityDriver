@@ -10,7 +10,7 @@
  * File Created: Tuesday, 2nd July 2024 12:59:59 pm
  * Author: Omegaki113r (omegaki113r@gmail.com)
  * -----
- * Last Modified: Tuesday, 28th January 2025 6:15:30 pm
+ * Last Modified: Sunday, 9th February 2025 6:05:02 pm
  * Modified By: Omegaki113r (omegaki113r@gmail.com)
  * -----
  * Copyright 2024 - 2024 0m3g4ki113r, Xtronic
@@ -184,34 +184,300 @@ inline constexpr T OMEGA_MIN(T in1, T in2) noexcept { return (((in1) < (in2)) ? 
 #define OMEGA_MIN(x, y) (((x) < (y)) ? (x) : (y))
 #endif
 
+#ifdef __cplusplus
+struct Duration
+{
+    u16 h;
+    u8 m;
+    u8 s;
+    u16 ms;
+    u64 us;
+
+    constexpr u16 us_to_ms(const auto in_us) { return in_us / 1000; }
+    constexpr u8 ms_to_s(const auto in_ms) { return in_ms / 1000; }
+    constexpr u8 s_to_mins(const auto in_s) { return in_s / 60; }
+    constexpr u16 mins_to_hrs(const auto in_mins) { return in_mins / 60; }
+    constexpr u64 to_us() const
+    {
+        const auto hour_us = h * 60 * 60 * 1000 * 1000;
+        const auto minutes_us = m * 60 * 1000 * 1000;
+        const auto seconds_us = s * 1000 * 1000;
+        const auto milliseconds_us = ms * 1000;
+        return hour_us + minutes_us + seconds_us + milliseconds_us + us;
+    }
+
+    constexpr Duration() : h(0), m(0), s(0), ms(0), us(0) {}
+    constexpr Duration(u16 in_h) : h(in_h), m(0), s(0), ms(0), us(0) {}
+    constexpr Duration(u16 in_h, u16 in_m) : h(in_h), m(in_m), s(0), ms(0), us(0) {}
+    constexpr Duration(u16 in_h, u16 in_m, u32 in_s) : h(in_h), m(in_m), s(in_s), ms(0), us(0) {}
+    constexpr Duration(u16 in_h, u16 in_m, u32 in_s, u32 in_ms) : h(in_h), m(in_m), s(in_s), ms(in_ms), us(0) {}
+    constexpr Duration(u16 in_h, u16 in_m, u32 in_s, u32 in_ms, u64 in_us) : h(in_h), m(in_m), s(in_s), ms(in_ms), us(in_us) {}
+
+    constexpr static u64 to_usecs(const Duration &duration) noexcept
+    {
+        return duration.us + duration.ms * 1000 + duration.s * 1000000 + duration.m * 60000000 + duration.h * 3600000000;
+    }
+
+    constexpr static u64 to_msecs(const Duration &duration) noexcept
+    {
+        return duration.us / 1000 + duration.ms + duration.s * 1000 + duration.m * 60 * 1000 + duration.h * 60 * 60 * 1000;
+    }
+
+    constexpr static u64 to_secs(const Duration &duration) noexcept
+    {
+        return duration.us / (1000 * 1000) + duration.ms / 1000 + duration.s + duration.m * 60 + duration.h * 60 * 60;
+    }
+
+    constexpr bool operator==(const Duration &other) const { return h == other.h && m == other.m && s == other.s && ms == other.ms && us == other.us; }
+
+    constexpr bool operator!=(const Duration &other) const { return h != other.h || m != other.m || s != other.s || ms != other.ms || us != other.us; }
+
+    constexpr bool operator>(const Duration &other) const
+    {
+        const auto calculate_total_us = [](const Duration &duration)
+        {
+            const auto hour_us = duration.h * 60 * 60 * 1000 * 1000;
+            const auto minutes_us = duration.m * 60 * 1000 * 1000;
+            const auto seconds_us = duration.s * 1000 * 1000;
+            const auto milliseconds_us = duration.ms * 1000;
+            return hour_us + minutes_us + seconds_us + milliseconds_us + duration.us;
+        };
+        return calculate_total_us(*this) > calculate_total_us(other);
+    }
+
+    constexpr bool operator<(const Duration &other) const
+    {
+        const auto calculate_total_us = [](const Duration &duration)
+        {
+            const auto hour_us = duration.h * 60 * 60 * 1000 * 1000;
+            const auto minutes_us = duration.m * 60 * 1000 * 1000;
+            const auto seconds_us = duration.s * 1000 * 1000;
+            const auto milliseconds_us = duration.ms * 1000;
+            return hour_us + minutes_us + seconds_us + milliseconds_us + duration.us;
+        };
+        return calculate_total_us(*this) < calculate_total_us(other);
+    }
+
+    constexpr bool operator<=(const Duration &other) const
+    {
+        const auto calculate_total_us = [](const Duration &duration)
+        {
+            const auto hour_us = duration.h * 60 * 60 * 1000 * 1000;
+            const auto minutes_us = duration.m * 60 * 1000 * 1000;
+            const auto seconds_us = duration.s * 1000 * 1000;
+            const auto milliseconds_us = duration.ms * 1000;
+            return hour_us + minutes_us + seconds_us + milliseconds_us + duration.us;
+        };
+        return calculate_total_us(*this) <= calculate_total_us(other);
+    }
+
+    constexpr bool operator>=(const Duration &other) const
+    {
+        const auto calculate_total_us = [](const Duration &duration)
+        {
+            const auto hour_us = duration.h * 60 * 60 * 1000 * 1000;
+            const auto minutes_us = duration.m * 60 * 1000 * 1000;
+            const auto seconds_us = duration.s * 1000 * 1000;
+            const auto milliseconds_us = duration.ms * 1000;
+            return hour_us + minutes_us + seconds_us + milliseconds_us + duration.us;
+        };
+        return calculate_total_us(*this) >= calculate_total_us(other);
+    }
+
+    constexpr Duration operator+(const Duration &other) const noexcept
+    {
+        u64 total_us = us + ms * 1000 + s * 1000000 + m * 60000000 + h * 3600000000;
+        u64 other_total_us = other.us + other.ms * 1000 + other.s * 1000000 + other.m * 60000000 + other.h * 3600000000;
+
+        u64 result_us = total_us + other_total_us;
+        u64 result_h = static_cast<u64>(result_us / 3600000000);
+        result_us %= 3600000000;
+
+        u64 result_m = static_cast<u64>(result_us / 60000000);
+        result_us %= 60000000;
+
+        u64 result_s = static_cast<u64>(result_us / 1000000);
+        result_us %= 1000000;
+
+        u64 result_ms = static_cast<u64>(result_us / 1000);
+        result_us %= 1000;
+
+        u64 result_us_remaining = result_us;
+        return Duration(result_h, result_m, result_s, result_ms, result_us_remaining);
+    };
+
+    constexpr Duration operator-(const Duration &other) const noexcept
+    {
+        u64 total_us = us + ms * 1000 + s * 1000000 + m * 60000000 + h * 3600000000;
+        u64 other_total_us = other.us + other.ms * 1000 + other.s * 1000000 + other.m * 60000000 + other.h * 3600000000;
+
+        if (other_total_us > total_us)
+        {
+            return Duration(0, 0, 0, 0, 0);
+        }
+
+        u64 result_us = total_us - other_total_us;
+        u64 result_h = static_cast<u64>(result_us / 3600000000);
+        result_us %= 3600000000;
+        u64 result_m = static_cast<u64>(result_us / 60000000);
+        result_us %= 60000000;
+        u64 result_s = static_cast<u64>(result_us / 1000000);
+        result_us %= 1000000;
+        u64 result_ms = static_cast<u64>(result_us / 1000);
+        result_us %= 1000;
+        u64 result_us_remaining = result_us;
+        return Duration(result_h, result_m, result_s, result_ms, result_us_remaining);
+    }
+
+    constexpr Duration operator=(u64 in_time_us) noexcept
+    {
+        return {0, 0, 0, 0, in_time_us};
+    }
+
+    constexpr u64 get_in_msecs() const noexcept
+    {
+        return (h * 60 * 60 * 1000) + (m * 60 * 1000) + (s * 1000) + ms + (us / 1000);
+    }
+
+    constexpr Duration hours(const Duration in_duration)
+    {
+        h = in_duration.h;
+        return *this;
+    }
+    constexpr Duration hours(const u64 in_duration)
+    {
+        h = in_duration;
+        return *this;
+    }
+
+    constexpr Duration minutes(const Duration in_duration)
+    {
+        m = in_duration.m;
+        return *this;
+    }
+    constexpr Duration minutes(const u64 in_duration)
+    {
+        m = in_duration;
+        return *this;
+    }
+
+    constexpr Duration seconds(const Duration in_duration)
+    {
+        s = in_duration.s;
+        return *this;
+    }
+    constexpr Duration seconds(const u64 in_duration)
+    {
+        s = in_duration;
+        return *this;
+    }
+
+    constexpr Duration milliseconds(const Duration in_duration)
+    {
+        ms = in_duration.ms;
+        return *this;
+    }
+    constexpr Duration milliseconds(const u64 in_duration)
+    {
+        ms = in_duration;
+        return *this;
+    }
+
+    constexpr Duration microseconds(const Duration in_duration)
+    {
+        us = in_duration.us;
+        return *this;
+    }
+    constexpr Duration microseconds(const u64 in_duration)
+    {
+        us = in_duration;
+        return *this;
+    }
+};
+#else
+typedef struct
+{
+    u16 h;
+    u8 m;
+    u8 s;
+    u16 ms;
+    u64 us;
+} Duration;
+
+#define DURATION() (Duration){0, 0, 0, 0, 0}
+#define DURATION_HRS(hrs) (Duration){hrs, 0, 0, 0, 0}
+#define DURATION_MINS(hrs, mins) (Duration){hrs, mins, 0, 0, 0}
+#define DURATION_SECS(hrs, mins, secs) (Duration){hrs, mins, secs, 0, 0}
+#define DURATION_MSECS(hrs, mins, secs, msecs) (Duration){hrs, mins, secs, msecs, 0}
+#define DURATION_USECS(hrs, mins, secs, msecs, usecs) \
+    (Duration) { hrs, mins, secs, msecs, usecs }
+#define DURATION_EQ(x, y) (x.h == y.h) && (x.m == y.m) && (x.s == y.s) && (x.ms == y.ms) && (x.us == y.us)
+#define DURATION_NEQ(x, y) (x.h != y.h) || (x.m != y.m) || (x.s != y.s) || (x.ms != y.ms) || (x.us != y.us)
+u64 calculate_usec(Duration duration)
+{
+    const auto hour_us = duration.h * 60 * 60 * 1000 * 1000;
+    const auto minutes_us = duration.m * 60 * 1000 * 1000;
+    const auto seconds_us = duration.s * 1000 * 1000;
+    const auto milliseconds_us = duration.ms * 1000;
+    return hour_us + minutes_us + seconds_us + milliseconds_us + duration.us;
+}
+#define DURATION_GREATER_THAN_EQ(x, y) calculate_usec(x) >= calculate_usec(y)
+#define DURATION_GREATER_THAN(x, y) calculate_usec(x) > calculate_usec(y)
+#define DURATION_LESS_THAN_EQ(x, y) calculate_usec(x) <= calculate_usec(y)
+#define DURATION_LESS_THAN(x, y) calculate_usec(x) < calculate_usec(y)
+#define DURATION_ADD(x, y)                                                                                               \
+    {                                                                                                                    \
+        u64 total_us = us + ms * 1000 + s * 1000000 + m * 60000000 + h * 3600000000;                                     \
+        u64 other_total_us = other.us + other.ms * 1000 + other.s * 1000000 + other.m * 60000000 + other.h * 3600000000; \
+                                                                                                                         \
+        u64 result_us = total_us + other_total_us;                                                                       \
+        u64 result_h = result_us / 3600000000;                                                                           \
+        result_us %= 3600000000;                                                                                         \
+                                                                                                                         \
+        u64 result_m = result_us / 60000000;                                                                             \
+        result_us %= 60000000;                                                                                           \
+                                                                                                                         \
+        u64 result_s = result_us / 1000000;                                                                              \
+        result_us %= 1000000;                                                                                            \
+                                                                                                                         \
+        u64 result_ms = result_us / 1000;                                                                                \
+        result_us %= 1000;                                                                                               \
+                                                                                                                         \
+        u64 result_us_remaining = result_us;                                                                             \
+        return {result_h, result_m, result_s, result_ms, result_us_remaining};                                           \
+    }
+#define DURATION_SUB(x, y)                                                                                               \
+    {                                                                                                                    \
+        u64 total_us = us + ms * 1000 + s * 1000000 + m * 60000000 + h * 3600000000;                                     \
+        u64 other_total_us = other.us + other.ms * 1000 + other.s * 1000000 + other.m * 60000000 + other.h * 3600000000; \
+                                                                                                                         \
+        if (other_total_us > total_us)                                                                                   \
+        {                                                                                                                \
+            return {0, 0, 0, 0, 0};                                                                                      \
+        }                                                                                                                \
+                                                                                                                         \
+        u64 result_us = total_us - other_total_us;                                                                       \
+        u64 result_h = result_us / 3600000000;                                                                           \
+        result_us %= 3600000000;                                                                                         \
+        u64 result_m = result_us / 60000000;                                                                             \
+        result_us %= 60000000;                                                                                           \
+        u64 result_s = result_us / 1000000;                                                                              \
+        result_us %= 1000000;                                                                                            \
+        u64 result_ms = result_us / 1000;                                                                                \
+        result_us %= 1000;                                                                                               \
+        u64 result_us_remaining = result_us;                                                                             \
+        return Duration(result_h, result_m, result_s, result_ms, result_us_remaining);                                   \
+    }
+#endif
+
 #if __has_include(<freertos/FreeRTOS.h>)
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
-#define delay_ms(x) vTaskDelay(pdMS_TO_TICKS(x))
-#define delay_s(x) vTaskDelay(pdMS_TO_TICKS(x * 1000))
 
 #ifdef __cplusplus
-
-constexpr int operator"" _us(unsigned long long in_microseconds)
-{
-    return in_microseconds;
-}
-
-constexpr int operator"" _ms(unsigned long long in_milliseconds)
-{
-    return MS_TO_US(in_milliseconds);
-}
-
-constexpr int operator"" _s(unsigned long long in_seconds)
-{
-    return S_TO_US(in_seconds);
-}
-
-inline void delay(unsigned long long in_delay)
-{
-    delay_ms(in_delay);
-}
-
+constexpr void delay_ms(Duration duration) { vTaskDelay(pdMS_TO_TICKS(Duration::to_msecs(duration))); }
+constexpr void delay_s(Duration duration) { vTaskDelay(pdMS_TO_TICKS(Duration::to_msecs(duration))); }
+#else
 #endif
 #endif
 
