@@ -10,7 +10,7 @@
  * File Created: Tuesday, 2nd July 2024 12:59:59 pm
  * Author: Omegaki113r (omegaki113r@gmail.com)
  * -----
- * Last Modified: Sunday, 9th February 2025 6:47:35 pm
+ * Last Modified: Wednesday, 12th February 2025 11:57:08 pm
  * Modified By: Omegaki113r (omegaki113r@gmail.com)
  * -----
  * Copyright 2024 - 2024 0m3g4ki113r, Xtronic
@@ -213,19 +213,31 @@ struct Duration
     constexpr Duration(u16 in_h, u16 in_m, u32 in_s, u32 in_ms) : h(in_h), m(in_m), s(in_s), ms(in_ms), us(0) {}
     constexpr Duration(u16 in_h, u16 in_m, u32 in_s, u32 in_ms, u64 in_us) : h(in_h), m(in_m), s(in_s), ms(in_ms), us(in_us) {}
 
-    constexpr static u64 to_usecs(const Duration &duration) noexcept
+    constexpr static double to_usecs(const Duration &duration) noexcept
     {
-        return duration.us + duration.ms * 1000 + duration.s * 1000000 + duration.m * 60000000 + duration.h * 3600000000;
+        return static_cast<double>(duration.us) +
+               static_cast<double>(duration.ms) * 1000.0 +
+               static_cast<double>(duration.s) * 1000.0 * 1000.0 +
+               static_cast<double>(duration.m) * 60.0 * 1000.0 * 1000.0 +
+               static_cast<double>(duration.h) * 60.0 * 60.0 * 1000.0 * 1000.0;
     }
 
-    constexpr static u64 to_msecs(const Duration &duration) noexcept
+    constexpr static double to_msecs(const Duration &duration) noexcept
     {
-        return duration.us / 1000 + duration.ms + duration.s * 1000 + duration.m * 60 * 1000 + duration.h * 60 * 60 * 1000;
+        return static_cast<double>(duration.us) / 1000.0 +
+               static_cast<double>(duration.ms) +
+               static_cast<double>(duration.s) * 1000.0 +
+               static_cast<double>(duration.m) * 60.0 * 1000.0 +
+               static_cast<double>(duration.h) * 60.0 * 60.0 * 1000.0;
     }
 
-    constexpr static u64 to_secs(const Duration &duration) noexcept
+    constexpr static double to_secs(const Duration &duration) noexcept
     {
-        return duration.us / (1000 * 1000) + duration.ms / 1000 + duration.s + duration.m * 60 + duration.h * 60 * 60;
+        return static_cast<double>(duration.us) / (1000.0 * 1000.0) +
+               static_cast<double>(duration.ms) / 1000.0 +
+               static_cast<double>(duration.s) +
+               static_cast<double>(duration.m) * 60.0 +
+               static_cast<double>(duration.h) * 60.0 * 60.0;
     }
 
     constexpr bool operator==(const Duration &other) const { return h == other.h && m == other.m && s == other.s && ms == other.ms && us == other.us; }
@@ -332,11 +344,6 @@ struct Duration
     constexpr Duration operator=(u64 in_time_us) noexcept
     {
         return {0, 0, 0, 0, in_time_us};
-    }
-
-    constexpr u64 get_in_msecs() const noexcept
-    {
-        return (h * 60 * 60 * 1000) + (m * 60 * 1000) + (s * 1000) + ms + (us / 1000);
     }
 
     constexpr Duration hours(const Duration in_duration)
