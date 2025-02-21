@@ -10,7 +10,7 @@
  * File Created: Tuesday, 2nd July 2024 12:59:59 pm
  * Author: Omegaki113r (omegaki113r@gmail.com)
  * -----
- * Last Modified: Friday, 21st February 2025 2:38:00 pm
+ * Last Modified: Friday, 21st February 2025 3:05:36 pm
  * Modified By: Omegaki113r (omegaki113r@gmail.com)
  * -----
  * Copyright 2024 - 2024 0m3g4ki113r, Xtronic
@@ -248,10 +248,10 @@ struct Duration
     {
         const auto calculate_total_us = [](const Duration &duration)
         {
-            const auto hour_us = duration.h * 60 * 60 * 1000 * 1000;
-            const auto minutes_us = duration.m * 60 * 1000 * 1000;
-            const auto seconds_us = duration.s * 1000 * 1000;
-            const auto milliseconds_us = duration.ms * 1000;
+            const auto hour_us = static_cast<u64>(duration.h) * 60 * 60 * 1000 * 1000;
+            const auto minutes_us = static_cast<u64>(duration.m) * 60 * 1000 * 1000;
+            const auto seconds_us = static_cast<u64>(duration.s) * 1000 * 1000;
+            const auto milliseconds_us = static_cast<u64>(duration.ms) * 1000;
             return hour_us + minutes_us + seconds_us + milliseconds_us + duration.us;
         };
         OMEGA_LOGD("%lld %lld", calculate_total_us(*this), calculate_total_us(other));
@@ -262,10 +262,10 @@ struct Duration
     {
         const auto calculate_total_us = [](const Duration &duration)
         {
-            const auto hour_us = duration.h * 60 * 60 * 1000 * 1000;
-            const auto minutes_us = duration.m * 60 * 1000 * 1000;
-            const auto seconds_us = duration.s * 1000 * 1000;
-            const auto milliseconds_us = duration.ms * 1000;
+            const auto hour_us = static_cast<u64>(duration.h) * 60 * 60 * 1000 * 1000;
+            const auto minutes_us = static_cast<u64>(duration.m) * 60 * 1000 * 1000;
+            const auto seconds_us = static_cast<u64>(duration.s) * 1000 * 1000;
+            const auto milliseconds_us = static_cast<u64>(duration.ms) * 1000;
             return hour_us + minutes_us + seconds_us + milliseconds_us + duration.us;
         };
         OMEGA_LOGD("%lld %lld", calculate_total_us(*this), calculate_total_us(other));
@@ -276,10 +276,10 @@ struct Duration
     {
         const auto calculate_total_us = [](const Duration &duration)
         {
-            const auto hour_us = duration.h * 60 * 60 * 1000 * 1000;
-            const auto minutes_us = duration.m * 60 * 1000 * 1000;
-            const auto seconds_us = duration.s * 1000 * 1000;
-            const auto milliseconds_us = duration.ms * 1000;
+            const auto hour_us = static_cast<u64>(duration.h) * 60 * 60 * 1000 * 1000;
+            const auto minutes_us = static_cast<u64>(duration.m) * 60 * 1000 * 1000;
+            const auto seconds_us = static_cast<u64>(duration.s) * 1000 * 1000;
+            const auto milliseconds_us = static_cast<u64>(duration.ms) * 1000;
             return hour_us + minutes_us + seconds_us + milliseconds_us + duration.us;
         };
         OMEGA_LOGD("%lld %lld", calculate_total_us(*this), calculate_total_us(other));
@@ -290,10 +290,10 @@ struct Duration
     {
         const auto calculate_total_us = [](const Duration &duration)
         {
-            const auto hour_us = duration.h * 60 * 60 * 1000 * 1000;
-            const auto minutes_us = duration.m * 60 * 1000 * 1000;
-            const auto seconds_us = duration.s * 1000 * 1000;
-            const auto milliseconds_us = duration.ms * 1000;
+            const auto hour_us = static_cast<u64>(duration.h) * 60 * 60 * 1000 * 1000;
+            const auto minutes_us = static_cast<u64>(duration.m) * 60 * 1000 * 1000;
+            const auto seconds_us = static_cast<u64>(duration.s) * 1000 * 1000;
+            const auto milliseconds_us = static_cast<u64>(duration.ms) * 1000;
             return hour_us + minutes_us + seconds_us + milliseconds_us + duration.us;
         };
         OMEGA_LOGD("%lld %lld", calculate_total_us(*this), calculate_total_us(other));
