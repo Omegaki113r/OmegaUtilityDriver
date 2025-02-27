@@ -10,7 +10,7 @@
  * File Created: Tuesday, 2nd July 2024 12:59:59 pm
  * Author: Omegaki113r (omegaki113r@gmail.com)
  * -----
- * Last Modified: Thursday, 27th February 2025 4:43:34 pm
+ * Last Modified: Thursday, 27th February 2025 6:59:03 pm
  * Modified By: Omegaki113r (omegaki113r@gmail.com)
  * -----
  * Copyright 2024 - 2024 0m3g4ki113r, Xtronic
@@ -41,8 +41,8 @@ typedef int32_t i32;
 
 typedef u64 OmegaHandle;
 
-#define internal static
-#define global static
+#define __internal__ static
+#define __global__ static
 #ifndef UNUSED
 #define UNUSED(arg) (void)arg
 #endif
