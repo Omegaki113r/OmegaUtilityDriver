@@ -10,7 +10,7 @@
  * File Created: Thursday, 27th February 2025 4:30:02 pm
  * Author: Alexey Kutepov (reximkut@gmail.com)
  * -----
- * Last Modified: Thursday, 27th February 2025 4:31:02 pm
+ * Last Modified: Thursday, 27th February 2025 4:35:47 pm
  * Modified By: Omegaki113r (omegaki113r@gmail.com)
  * -----
  * Copyright 2022 - 2025 Alexey Kutepov, Xtronic
@@ -360,8 +360,8 @@ size_t arena_strlen(const char *s)
 
 void *arena_memcpy(void *dest, const void *src, size_t n)
 {
-    char *d = dest;
-    const char *s = src;
+    char *d = (char *)dest;
+    const char *s = (const char *)src;
     for (; n; n--)
         *d++ = *s++;
     return dest;
