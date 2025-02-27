@@ -10,7 +10,7 @@
  * File Created: Tuesday, 2nd July 2024 12:59:59 pm
  * Author: Omegaki113r (omegaki113r@gmail.com)
  * -----
- * Last Modified: Friday, 21st February 2025 3:06:34 pm
+ * Last Modified: Thursday, 27th February 2025 4:06:38 pm
  * Modified By: Omegaki113r (omegaki113r@gmail.com)
  * -----
  * Copyright 2024 - 2024 0m3g4ki113r, Xtronic
@@ -726,6 +726,50 @@ public:
 private:
     size_t used_memory = 0;
     alignas(1) u8 arena[arena_size];
+};
+
+class DynamicArenaAllocator
+{
+public:
+    explicit DynamicArenaAllocator(size_t arena_size)
+        : arena_size(arena_size), used_memory(0)
+    {
+        arena = (u8 *)calloc(arena_size, sizeof(u8));
+    }
+
+    ~DynamicArenaAllocator()
+    {
+        free(arena);
+    }
+
+    template <typename T>
+    T *allocate(size_t count = 1) noexcept
+    {
+        const size_t required_memory = count * sizeof(T);
+        if (used_memory + required_memory > arena_size)
+        {
+            std::cerr << "Not enough space in arena" << std::endl;
+            return nullptr;
+        }
+        T *ptr = reinterpret_cast<T *>(arena + used_memory);
+        used_memory += required_memory;
+        return ptr;
+    }
+
+    void reset() noexcept
+    {
+        used_memory = 0;
+    }
+
+    size_t remaining() const noexcept
+    {
+        return arena_size - used_memory;
+    }
+
+private:
+    size_t arena_size;
+    size_t used_memory;
+    uint8_t *arena;
 };
 
 #else
