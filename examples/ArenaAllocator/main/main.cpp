@@ -11,4 +11,6 @@ extern "C" void app_main(void)
         int *allocated = arena.allocate<int>(10);
         OMEGA_LOGE("Remaining size: %d", arena.remaining());
     }
+
+    Arena arena{};
 }

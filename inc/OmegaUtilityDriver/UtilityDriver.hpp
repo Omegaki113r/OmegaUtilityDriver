@@ -10,7 +10,7 @@
  * File Created: Tuesday, 2nd July 2024 12:59:59 pm
  * Author: Omegaki113r (omegaki113r@gmail.com)
  * -----
- * Last Modified: Thursday, 27th February 2025 4:35:01 pm
+ * Last Modified: Thursday, 27th February 2025 4:43:34 pm
  * Modified By: Omegaki113r (omegaki113r@gmail.com)
  * -----
  * Copyright 2024 - 2024 0m3g4ki113r, Xtronic
@@ -804,6 +804,3 @@ void *arenaAllocate(StaticArenaAllocator *allocator, size_t size)
 void resetArenaAllocator(StaticArenaAllocator *allocator) { allocator->used = 0; }
 size_t remainingMemory(StaticArenaAllocator *allocator) { return allocator->size - allocator->used; }
 #endif
-
-#define ARENA_IMPLEMENTATION
-#include "arena.h"
