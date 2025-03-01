@@ -10,7 +10,7 @@
  * File Created: Thursday, 27th February 2025 4:30:02 pm
  * Author: Alexey Kutepov (reximkut@gmail.com)
  * -----
- * Last Modified: Thursday, 27th February 2025 4:35:47 pm
+ * Last Modified: Sunday, 2nd March 2025 1:08:24 am
  * Modified By: Omegaki113r (omegaki113r@gmail.com)
  * -----
  * Copyright 2022 - 2025 Alexey Kutepov, Xtronic
@@ -164,7 +164,11 @@ Region *new_region(size_t capacity)
     size_t size_bytes = sizeof(Region) + sizeof(uintptr_t) * capacity;
     // TODO: it would be nice if we could guarantee that the regions are allocated by ARENA_BACKEND_LIBC_MALLOC are page aligned
     Region *r = (Region *)malloc(size_bytes);
-    ARENA_ASSERT(r); // TODO: since ARENA_ASSERT is disableable go through all the places where we use it to check for failed memory allocation and return with NULL there.
+    if (NULL == r)
+    {
+        return r;
+    }
+    // ARENA_ASSERT(r); // TODO: since ARENA_ASSERT is disableable go through all the places where we use it to check for failed memory allocation and return with NULL there.
     r->next = NULL;
     r->count = 0;
     r->capacity = capacity;
