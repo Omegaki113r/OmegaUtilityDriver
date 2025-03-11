@@ -10,7 +10,7 @@
  * File Created: Tuesday, 2nd July 2024 1:01:18 pm
  * Author: Omegaki113r (omegaki113r@gmail.com)
  * -----
- * Last Modified: Thursday, 27th February 2025 7:05:33 pm
+ * Last Modified: Tuesday, 11th March 2025 7:24:57 pm
  * Modified By: Omegaki113r (omegaki113r@gmail.com)
  * -----
  * Copyright 2024 - 2024 0m3g4ki113r, Xtronic
@@ -25,11 +25,6 @@
 #include <vector>
 
 #include "OmegaUtilityDriver/UtilityDriver.hpp"
-
-void __attribute__((constructor)) OmegaLoggingInitialized()
-{
-    printf("%s\r\n", "Logging Initialized");
-}
 
 constexpr __internal__ u8 MAX_ITERATION_AMOUNT = 100;
 __internal__ std::vector<OmegaHandle> _s_handles{};

@@ -10,7 +10,7 @@
  * File Created: Tuesday, 2nd July 2024 12:59:59 pm
  * Author: Omegaki113r (omegaki113r@gmail.com)
  * -----
- * Last Modified: Thursday, 27th February 2025 6:59:03 pm
+ * Last Modified: Tuesday, 11th March 2025 7:29:02 pm
  * Modified By: Omegaki113r (omegaki113r@gmail.com)
  * -----
  * Copyright 2024 - 2024 0m3g4ki113r, Xtronic
@@ -193,10 +193,10 @@ struct Duration
     u16 ms;
     u64 us;
 
-    constexpr u16 us_to_ms(const auto in_us) { return in_us / 1000; }
-    constexpr u8 ms_to_s(const auto in_ms) { return in_ms / 1000; }
-    constexpr u8 s_to_mins(const auto in_s) { return in_s / 60; }
-    constexpr u16 mins_to_hrs(const auto in_mins) { return in_mins / 60; }
+    constexpr u16 us_to_ms(const u64 in_us) { return in_us / 1000; }
+    constexpr u8 ms_to_s(const u64 in_ms) { return in_ms / 1000; }
+    constexpr u8 s_to_mins(const u64 in_s) { return in_s / 60; }
+    constexpr u16 mins_to_hrs(const u64 in_mins) { return in_mins / 60; }
     constexpr u64 to_us() const
     {
         const auto hour_us = h * 60 * 60 * 1000 * 1000;
@@ -213,7 +213,7 @@ struct Duration
     constexpr Duration(u16 in_h, u16 in_m, u32 in_s, u32 in_ms) : h(in_h), m(in_m), s(in_s), ms(in_ms), us(0) {}
     constexpr Duration(u16 in_h, u16 in_m, u32 in_s, u32 in_ms, u64 in_us) : h(in_h), m(in_m), s(in_s), ms(in_ms), us(in_us) {}
 
-    constexpr static double to_usecs(const Duration &duration) noexcept
+    static double to_usecs(const Duration &duration) noexcept
     {
         return static_cast<double>(duration.us) +
                static_cast<double>(duration.ms) * 1000.0 +
@@ -222,7 +222,7 @@ struct Duration
                static_cast<double>(duration.h) * 60.0 * 60.0 * 1000.0 * 1000.0;
     }
 
-    constexpr static double to_msecs(const Duration &duration) noexcept
+    static double to_msecs(const Duration &duration) noexcept
     {
         return static_cast<double>(duration.us) / 1000.0 +
                static_cast<double>(duration.ms) +
@@ -231,7 +231,7 @@ struct Duration
                static_cast<double>(duration.h) * 60.0 * 60.0 * 1000.0;
     }
 
-    constexpr static double to_secs(const Duration &duration) noexcept
+    static double to_secs(const Duration &duration) noexcept
     {
         return static_cast<double>(duration.us) / (1000.0 * 1000.0) +
                static_cast<double>(duration.ms) / 1000.0 +
@@ -240,11 +240,11 @@ struct Duration
                static_cast<double>(duration.h) * 60.0 * 60.0;
     }
 
-    constexpr bool operator==(const Duration &other) const { return h == other.h && m == other.m && s == other.s && ms == other.ms && us == other.us; }
+    bool operator==(const Duration &other) const { return h == other.h && m == other.m && s == other.s && ms == other.ms && us == other.us; }
 
-    constexpr bool operator!=(const Duration &other) const { return h != other.h || m != other.m || s != other.s || ms != other.ms || us != other.us; }
+    bool operator!=(const Duration &other) const { return h != other.h || m != other.m || s != other.s || ms != other.ms || us != other.us; }
 
-    constexpr bool operator>(const Duration &other) const
+    bool operator>(const Duration &other) const
     {
         const auto calculate_total_us = [](const Duration &duration)
         {
@@ -257,7 +257,7 @@ struct Duration
         return calculate_total_us(*this) > calculate_total_us(other);
     }
 
-    constexpr bool operator<(const Duration &other) const
+    bool operator<(const Duration &other) const
     {
         const auto calculate_total_us = [](const Duration &duration)
         {
@@ -270,7 +270,7 @@ struct Duration
         return calculate_total_us(*this) < calculate_total_us(other);
     }
 
-    constexpr bool operator<=(const Duration &other) const
+    bool operator<=(const Duration &other) const
     {
         const auto calculate_total_us = [](const Duration &duration)
         {
@@ -283,7 +283,7 @@ struct Duration
         return calculate_total_us(*this) <= calculate_total_us(other);
     }
 
-    constexpr bool operator>=(const Duration &other) const
+    bool operator>=(const Duration &other) const
     {
         const auto calculate_total_us = [](const Duration &duration)
         {
@@ -296,7 +296,7 @@ struct Duration
         return calculate_total_us(*this) >= calculate_total_us(other);
     }
 
-    constexpr Duration operator+(const Duration &other) const noexcept
+    Duration operator+(const Duration &other) const noexcept
     {
         u64 total_us = us + ms * 1000 + s * 1000000 + m * 60000000 + h * 3600000000;
         u64 other_total_us = other.us + other.ms * 1000 + other.s * 1000000 + other.m * 60000000 + other.h * 3600000000;
@@ -318,7 +318,7 @@ struct Duration
         return Duration(result_h, result_m, result_s, result_ms, result_us_remaining);
     };
 
-    constexpr Duration operator-(const Duration &other) const noexcept
+    Duration operator-(const Duration &other) const noexcept
     {
         u64 total_us = us + ms * 1000 + s * 1000000 + m * 60000000 + h * 3600000000;
         u64 other_total_us = other.us + other.ms * 1000 + other.s * 1000000 + other.m * 60000000 + other.h * 3600000000;
@@ -341,7 +341,7 @@ struct Duration
         return Duration(result_h, result_m, result_s, result_ms, result_us_remaining);
     }
 
-    constexpr Duration operator=(u64 in_time_us) noexcept
+    Duration operator=(u64 in_time_us) noexcept
     {
         return {0, 0, 0, 0, in_time_us};
     }
