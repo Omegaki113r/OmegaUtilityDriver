@@ -8,5 +8,9 @@
             "projectCreationYear",
             "2024"
         ]
-    ]
+    ],
+    "files.associations": {
+        "vector": "cpp",
+        "xstring": "cpp"
+    }
 }
