@@ -185,6 +185,9 @@ inline constexpr T OMEGA_MIN(T in1, T in2) noexcept { return (((in1) < (in2)) ? 
 #endif
 
 #ifdef __cplusplus
+namespace Omega
+{
+    
 struct Duration
 {
     u16 h;
@@ -401,6 +404,7 @@ struct Duration
         return *this;
     }
 };
+}
 #else
 typedef struct
 {
