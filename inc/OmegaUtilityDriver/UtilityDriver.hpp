@@ -10,7 +10,7 @@
  * File Created: Tuesday, 2nd July 2024 12:59:59 pm
  * Author: Omegaki113r (omegaki113r@gmail.com)
  * -----
- * Last Modified: Tuesday, 11th March 2025 7:29:02 pm
+ * Last Modified: Saturday, 19th April 2025 3:36:16 pm
  * Modified By: Omegaki113r (omegaki113r@gmail.com)
  * -----
  * Copyright 2024 - 2024 0m3g4ki113r, Xtronic
@@ -482,9 +482,12 @@ u64 calculate_usec(Duration duration)
 #include <freertos/task.h>
 
 #ifdef __cplusplus
-constexpr void delay_ms(Duration duration) { vTaskDelay(pdMS_TO_TICKS(Duration::to_msecs(duration))); }
-constexpr void delay_s(Duration duration) { vTaskDelay(pdMS_TO_TICKS(Duration::to_msecs(duration))); }
-constexpr void delay(Duration duration) { vTaskDelay(pdMS_TO_TICKS(Duration::to_msecs(duration))); }
+namespace Omega
+{
+    constexpr void delay_ms(Duration duration) { vTaskDelay(pdMS_TO_TICKS(Duration::to_msecs(duration))); }
+    constexpr void delay_s(Duration duration) { vTaskDelay(pdMS_TO_TICKS(Duration::to_msecs(duration))); }
+    constexpr void delay(Duration duration) { vTaskDelay(pdMS_TO_TICKS(Duration::to_msecs(duration))); }
+}
 #else
 #endif
 #endif
